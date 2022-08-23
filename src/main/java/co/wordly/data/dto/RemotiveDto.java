@@ -20,6 +20,7 @@ public class RemotiveDto {
     private static final String PROPERTY_JOB_TITLE = "title";
     private static final String PROPERTY_JOB_DESCRIPTION = "description";
     private static final String PROPERTY_COMPANY_NAME = "company_name";
+    private static final String PROPERTY_COMPANY_LOGO = "company_logo_url";
     private static final String PROPERTY_SALARY = "salary";
     private static final String PROPERTY_PUBLICATION_DATE = "publication_date";
 
@@ -28,6 +29,7 @@ public class RemotiveDto {
     private final String jobTitle;
     private final String jobDescription;
     private final String companyName;
+    private final String companyLogoUrl;
     private final String salary;
     private final String publicationDate;
 
@@ -37,6 +39,7 @@ public class RemotiveDto {
                        @JsonProperty(PROPERTY_JOB_TITLE) String jobTitle,
                        @JsonProperty(PROPERTY_JOB_DESCRIPTION) String jobDescription,
                        @JsonProperty(PROPERTY_COMPANY_NAME) String companyName,
+                       @JsonProperty(PROPERTY_COMPANY_LOGO) String companyLogoUrl,
                        @JsonProperty(PROPERTY_SALARY) String salary,
                        @JsonProperty(PROPERTY_PUBLICATION_DATE) String publicationDate) {
         this.jobId = jobId;
@@ -44,6 +47,7 @@ public class RemotiveDto {
         this.jobTitle = jobTitle;
         this.jobDescription = jobDescription;
         this.companyName = companyName;
+        this.companyLogoUrl = companyLogoUrl;
         this.salary = salary;
         this.publicationDate = publicationDate;
     }
@@ -56,35 +60,48 @@ public class RemotiveDto {
                 ", jobTitle='" + jobTitle + '\'' +
                 ", jobDescription='" + jobDescription + '\'' +
                 ", companyName='" + companyName + '\'' +
+                ", companyLogoUrl='" + companyLogoUrl + '\'' +
                 ", salary='" + salary + '\'' +
                 ", publicationDate='" + publicationDate + '\'' +
                 '}';
     }
 
+    @JsonProperty(PROPERTY_JOB_ID)
     public String getJobId() {
         return jobId;
     }
 
+    @JsonProperty(PROPERTY_JOB_URL)
     public String getJobUrl() {
         return jobUrl;
     }
 
+    @JsonProperty(PROPERTY_JOB_TITLE)
     public String getJobTitle() {
         return jobTitle;
     }
 
+    @JsonProperty(PROPERTY_JOB_DESCRIPTION)
     public String getJobDescription() {
         return jobDescription;
     }
 
+    @JsonProperty(PROPERTY_COMPANY_NAME)
     public String getCompanyName() {
         return companyName;
     }
 
+    @JsonProperty(PROPERTY_COMPANY_LOGO)
+    public String getCompanyLogoUrl() {
+        return companyLogoUrl;
+    }
+
+    @JsonProperty(PROPERTY_SALARY)
     public String getSalary() {
         return salary;
     }
 
+    @JsonProperty(PROPERTY_PUBLICATION_DATE)
     public String getPublicationDate() {
         return publicationDate;
     }
@@ -100,11 +117,12 @@ public class RemotiveDto {
         RemotiveDto that = (RemotiveDto) o;
         return Objects.equals(jobId, that.jobId) && Objects.equals(jobUrl, that.jobUrl) && Objects.equals(jobTitle, that.jobTitle) &&
                 Objects.equals(jobDescription, that.jobDescription) && Objects.equals(companyName, that.companyName) &&
-                Objects.equals(salary, that.salary) && Objects.equals(publicationDate, that.publicationDate);
+                Objects.equals(companyLogoUrl, that.companyLogoUrl) && Objects.equals(salary, that.salary) &&
+                Objects.equals(publicationDate, that.publicationDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(jobId, jobUrl, jobTitle, jobDescription, companyName, salary, publicationDate);
+        return Objects.hash(jobId, jobUrl, jobTitle, jobDescription, companyName, companyLogoUrl, salary, publicationDate);
     }
 }

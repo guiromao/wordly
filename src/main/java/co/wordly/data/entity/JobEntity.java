@@ -14,7 +14,6 @@ import java.util.UUID;
 @TypeAlias(JobEntity.JOB_COLLECTION)
 public class JobEntity {
 
-    private static final String FIELD_NAME = "name";
     private static final String FIELD_TITLE = "title";
     private static final String FIELD_DESCRIPTION = "description";
     private static final String FIELD_SALARY = "salary";
@@ -29,9 +28,6 @@ public class JobEntity {
 
     @Id
     private final String id;
-
-    @Field(FIELD_NAME)
-    private final String name;
 
     @Field(FIELD_TITLE)
     private final String title;
@@ -61,12 +57,11 @@ public class JobEntity {
     private final Instant publishDate;
 
     @PersistenceCreator
-    private JobEntity(String id, String name, String title,
+    private JobEntity(String id, String title,
                       String description, String salary,
                       String companyId, String url, String companyLogoUrl,
                       String sourceId, String sourceJobId, Instant publishDate) {
         this.id = id;
-        this.name = name;
         this.title = title;
         this.description = description;
         this.salary = salary;
@@ -82,7 +77,6 @@ public class JobEntity {
     public String toString() {
         return "Job{" +
                 "id='" + id + '\'' +
-                ", name='" + name + '\'' +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", salary='" + salary + '\'' +
@@ -97,10 +91,6 @@ public class JobEntity {
 
     public String getId() {
         return id;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public String getTitle() {
@@ -148,8 +138,8 @@ public class JobEntity {
             return false;
         }
         JobEntity job = (JobEntity) o;
-        return id.equals(job.id) && Objects.equals(name, job.name) &&
-                Objects.equals(title, job.title) && Objects.equals(description, job.description) &&
+        return id.equals(job.id) && Objects.equals(title, job.title) &&
+                Objects.equals(description, job.description) &&
                 Objects.equals(salary, job.salary) && Objects.equals(companyId, job.companyId) &&
                 Objects.equals(url, job.url) && Objects.equals(companyLogoUrl, job.companyLogoUrl) &&
                 sourceId.equals(job.sourceId) && sourceJobId.equals(job.sourceJobId) &&
@@ -158,13 +148,12 @@ public class JobEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, title, description, salary, companyId,
+        return Objects.hash(id, title, description, salary, companyId,
                 url, companyLogoUrl, sourceId, sourceJobId, publishDate);
     }
 
     public static class Builder {
 
-        private String name;
         private String title;
         private String description;
         private String salary;
@@ -174,11 +163,6 @@ public class JobEntity {
         private String sourceId;
         private String sourceJobId;
         private Instant publishDate;
-
-        public Builder name(String name) {
-            this.name = name;
-            return this;
-        }
 
         public Builder title(String title) {
             this.title = title;
@@ -227,7 +211,7 @@ public class JobEntity {
         public JobEntity build() {
             final String jobId = UUID.randomUUID().toString();
 
-            return new JobEntity(jobId, name, title, description, salary, companyId,
+            return new JobEntity(jobId, title, description, salary, companyId,
                     url, companyLogoUrl, sourceId, sourceJobId, publishDate);
         }
 
