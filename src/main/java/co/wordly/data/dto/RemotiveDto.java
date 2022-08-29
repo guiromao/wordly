@@ -13,7 +13,7 @@ import java.util.Objects;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY,
         getterVisibility = JsonAutoDetect.Visibility.NONE,
         isGetterVisibility = JsonAutoDetect.Visibility.NONE)
-public class RemotiveDto {
+public class RemotiveDto implements JobDto {
 
     private static final String PROPERTY_JOB_ID = "id";
     private static final String PROPERTY_JOB_URL = "url";
@@ -66,6 +66,21 @@ public class RemotiveDto {
                 '}';
     }
 
+    @Override
+    public String getId() {
+        return jobId;
+    }
+
+    @Override
+    public String getTitle() {
+        return jobTitle;
+    }
+
+    @Override
+    public String getDescription() {
+        return jobDescription;
+    }
+
     @JsonProperty(PROPERTY_JOB_ID)
     public String getJobId() {
         return jobId;
@@ -99,6 +114,31 @@ public class RemotiveDto {
     @JsonProperty(PROPERTY_SALARY)
     public String getSalary() {
         return salary;
+    }
+
+    @Override public String getCompanyId() {
+        return null;
+    }
+
+    @Override public String getUrl() {
+        return null;
+    }
+
+    @Override public String getCompanyUrl() {
+        return null;
+    }
+
+    @Override public String getSourceId() {
+        return null;
+    }
+
+    @Override public String getSourceJobId() {
+        return null;
+    }
+
+    @Override
+    public String getPublishDate() {
+        return publicationDate;
     }
 
     @JsonProperty(PROPERTY_PUBLICATION_DATE)
