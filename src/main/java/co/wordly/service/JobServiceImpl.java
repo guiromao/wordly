@@ -4,7 +4,6 @@ import co.wordly.data.entity.JobEntity;
 import co.wordly.data.model.JobSnippet;
 import co.wordly.data.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -32,7 +31,8 @@ public class JobServiceImpl implements JobService {
     }
 
     private JobEntity updateJob(Set<JobSnippet> jobIds, JobEntity job) {
-        JobSnippet jobSnippet = new JobSnippet(job.getId(), job.getSourceId(), job.getSourceJobId());
+        JobSnippet jobSnippet = new JobSnippet(job.getId(), job.getSourceId(), job.getSourceJobId(),
+                job.getCreationDate());
         JobSnippet existingSnippet = jobIds.stream()
                 .filter(snippet -> snippet.isSameSnippet(jobSnippet))
                 .findAny()
@@ -42,7 +42,8 @@ public class JobServiceImpl implements JobService {
             return job;
         }
 
-        return job.withId(existingSnippet.getJobId());
+        return job.withId(existingSnippet.getJobId())
+                .withCreationDate(existingSnippet.getCreationDate());
     }
 
 }

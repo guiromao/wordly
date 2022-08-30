@@ -1,5 +1,6 @@
 package co.wordly.data.model;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class JobSnippet {
@@ -7,11 +8,14 @@ public class JobSnippet {
     private final String jobId;
     private final String sourceId;
     private final String sourceJobId;
+    private final LocalDateTime creationDate;
 
-    public JobSnippet(String jobId, String sourceId, String sourceJobId) {
+    public JobSnippet(String jobId, String sourceId, String sourceJobId,
+                      LocalDateTime creationDate) {
         this.jobId = jobId;
         this.sourceId = sourceId;
         this.sourceJobId = sourceJobId;
+        this.creationDate = creationDate;
     }
 
     public boolean isSameSnippet(JobSnippet snippet) {
@@ -25,6 +29,7 @@ public class JobSnippet {
                 "jobId='" + jobId + '\'' +
                 ", sourceId='" + sourceId + '\'' +
                 ", sourceJobId='" + sourceJobId + '\'' +
+                ", creationDate=" + creationDate +
                 '}';
     }
 
@@ -40,6 +45,10 @@ public class JobSnippet {
         return sourceJobId;
     }
 
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -49,12 +58,13 @@ public class JobSnippet {
             return false;
         }
         JobSnippet that = (JobSnippet) o;
-        return jobId.equals(that.jobId) && Objects.equals(sourceId, that.sourceId) && Objects.equals(sourceJobId, that.sourceJobId);
+        return jobId.equals(that.jobId) && Objects.equals(sourceId, that.sourceId)
+                && Objects.equals(sourceJobId, that.sourceJobId) && Objects.equals(creationDate, that.creationDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(jobId, sourceId, sourceJobId);
+        return Objects.hash(jobId, sourceId, sourceJobId, creationDate);
     }
 
 }

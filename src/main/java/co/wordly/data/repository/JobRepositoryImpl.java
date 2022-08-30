@@ -37,7 +37,8 @@ public class JobRepositoryImpl implements JobRepositoryCustom {
     @Override
     public Set<JobSnippet> getSourceJobIdsDetails() {
         return mongoTemplate.findAll(JobEntity.class).stream()
-                .map(job -> new JobSnippet(job.getId(), job.getSourceId(), job.getSourceJobId()))
+                .map(job -> new JobSnippet(job.getId(), job.getSourceId(), job.getSourceJobId(),
+                        job.getCreationDate()))
                 .collect(Collectors.toSet());
     }
 

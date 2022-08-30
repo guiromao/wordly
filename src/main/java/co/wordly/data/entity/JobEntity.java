@@ -57,9 +57,11 @@ public class JobEntity {
     @Field(FIELD_SOURCE_JOB_ID)
     private final String sourceJobId;
 
+    // Date job was published by Source site
     @Field(FIELD_PUBLISH_DATE)
     private final LocalDateTime publishDate;
 
+    // Date document was created in this service's database
     @Indexed(name = "idx_job_ttl", expireAfter = "365d")
     @Field(FIELD_CREATION_DATE)
     private final LocalDateTime creationDate;
@@ -87,6 +89,12 @@ public class JobEntity {
         return new JobEntity(id, this.title, this.description, this.salary,
                 this.companyId, this.url, this.companyLogoUrl,
                 this.sourceId, this.sourceJobId, this.publishDate, this.creationDate);
+    }
+
+    public JobEntity withCreationDate(LocalDateTime initialCreationDate) {
+        return new JobEntity(id, this.title, this.description, this.salary,
+                this.companyId, this.url, this.companyLogoUrl,
+                this.sourceId, this.sourceJobId, this.publishDate, initialCreationDate);
     }
 
     @Override
