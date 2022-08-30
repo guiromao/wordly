@@ -3,6 +3,8 @@ package co.wordly.data.entity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.annotation.TypeAlias;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -12,6 +14,7 @@ import java.util.UUID;
 
 @Document(value = JobEntity.JOB_COLLECTION)
 @TypeAlias(JobEntity.JOB_COLLECTION)
+@CompoundIndex(name = "idx_title", def = "{'title': 'text}")
 public class JobEntity {
 
     private static final String FIELD_TITLE = "title";
@@ -23,6 +26,7 @@ public class JobEntity {
     private static final String FIELD_SOURCE_ID = "sourceId";
     private static final String FIELD_SOURCE_JOB_ID = "sourceJobId";
     private static final String FIELD_PUBLISH_DATE = "publishDate";
+    private static final String FIELD_CREATION_DATE = "creationDate";
 
     public static final String JOB_COLLECTION = "job";
 
@@ -56,11 +60,16 @@ public class JobEntity {
     @Field(FIELD_PUBLISH_DATE)
     private final LocalDateTime publishDate;
 
+    @Indexed(name = "idx_job_ttl", expireAfter = "365d")
+    @Field(FIELD_CREATION_DATE)
+    private final LocalDateTime creationDate;
+
     @PersistenceCreator
     private JobEntity(String id, String title,
                       String description, String salary,
                       String companyId, String url, String companyLogoUrl,
-                      String sourceId, String sourceJobId, LocalDateTime publishDate) {
+                      String sourceId, String sourceJobId, LocalDateTime publishDate,
+                      LocalDateTime creationDate) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -71,12 +80,13 @@ public class JobEntity {
         this.sourceId = sourceId;
         this.sourceJobId = sourceJobId;
         this.publishDate = publishDate;
+        this.creationDate = creationDate;
     }
 
     public JobEntity withId(String id) {
         return new JobEntity(id, this.title, this.description, this.salary,
                 this.companyId, this.url, this.companyLogoUrl,
-                this.sourceId, this.sourceJobId, this.publishDate);
+                this.sourceId, this.sourceJobId, this.publishDate, this.creationDate);
     }
 
     @Override
@@ -92,6 +102,7 @@ public class JobEntity {
                 ", sourceId='" + sourceId + '\'' +
                 ", sourceJobId='" + sourceJobId + '\'' +
                 ", publishDate=" + publishDate +
+                ", creationDate=" + creationDate +
                 '}';
     }
 
@@ -135,6 +146,10 @@ public class JobEntity {
         return publishDate;
     }
 
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -149,13 +164,13 @@ public class JobEntity {
                 Objects.equals(salary, job.salary) && Objects.equals(companyId, job.companyId) &&
                 Objects.equals(url, job.url) && Objects.equals(companyLogoUrl, job.companyLogoUrl) &&
                 sourceId.equals(job.sourceId) && sourceJobId.equals(job.sourceJobId) &&
-                Objects.equals(publishDate, job.publishDate);
+                Objects.equals(publishDate, job.publishDate) && Objects.equals(creationDate, job.creationDate);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id, title, description, salary, companyId,
-                url, companyLogoUrl, sourceId, sourceJobId, publishDate);
+                url, companyLogoUrl, sourceId, sourceJobId, publishDate, creationDate);
     }
 
     public static class Builder {
@@ -220,9 +235,10 @@ public class JobEntity {
 
         public JobEntity build() {
             final String jobId = UUID.randomUUID().toString();
+            final LocalDateTime creationDate = LocalDateTime.now();
 
             return new JobEntity(jobId, title, description, salary, companyId,
-                    url, companyLogoUrl, sourceId, sourceJobId, publishDate);
+                    url, companyLogoUrl, sourceId, sourceJobId, publishDate, creationDate);
         }
 
     }
