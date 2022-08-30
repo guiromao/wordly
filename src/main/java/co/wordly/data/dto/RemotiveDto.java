@@ -13,7 +13,7 @@ import java.util.Objects;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY,
         getterVisibility = JsonAutoDetect.Visibility.NONE,
         isGetterVisibility = JsonAutoDetect.Visibility.NONE)
-public class RemotiveDto implements JobDto {
+public class RemotiveDto implements ApiDto {
 
     private static final String PROPERTY_JOB_ID = "id";
     private static final String PROPERTY_JOB_URL = "url";
@@ -53,6 +53,20 @@ public class RemotiveDto implements JobDto {
     }
 
     @Override
+    public JobDto getJobDto() {
+        return new JobDto.Builder()
+                .title(jobTitle)
+                .description(jobDescription)
+                .salary(salary)
+                .companyName(companyName)
+                .url(jobUrl)
+                .sourceJobId(jobId)
+                .companyLogoUrl(companyLogoUrl)
+                .publishDate(publicationDate)
+                .build();
+    }
+
+    @Override
     public String toString() {
         return "RemotiveDto{" +
                 "jobId='" + jobId + '\'' +
@@ -66,17 +80,14 @@ public class RemotiveDto implements JobDto {
                 '}';
     }
 
-    @Override
     public String getId() {
         return jobId;
     }
 
-    @Override
     public String getTitle() {
         return jobTitle;
     }
 
-    @Override
     public String getDescription() {
         return jobDescription;
     }
@@ -116,27 +127,26 @@ public class RemotiveDto implements JobDto {
         return salary;
     }
 
-    @Override public String getCompanyId() {
+    public String getCompanyId() {
         return null;
     }
 
-    @Override public String getUrl() {
+    public String getUrl() {
         return null;
     }
 
-    @Override public String getCompanyUrl() {
+    public String getCompanyUrl() {
         return null;
     }
 
-    @Override public String getSourceId() {
+    public String getSourceId() {
         return null;
     }
 
-    @Override public String getSourceJobId() {
+    public String getSourceJobId() {
         return null;
     }
 
-    @Override
     public String getPublishDate() {
         return publicationDate;
     }

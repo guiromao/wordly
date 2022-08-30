@@ -1,11 +1,16 @@
 package co.wordly.data.repository;
 
 import co.wordly.data.entity.JobEntity;
+import co.wordly.data.model.JobSnippet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Repository;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Repository
 public class JobRepositoryImpl implements JobRepositoryCustom {
@@ -27,6 +32,13 @@ public class JobRepositoryImpl implements JobRepositoryCustom {
         Query query = new Query(existsCriteria);
 
         return mongoTemplate.exists(query, JobEntity.class);
+    }
+
+    @Override
+    public Set<JobSnippet> getSourceJobIdsDetails() {
+        return mongoTemplate.findAll(JobEntity.class).stream()
+                .map(job -> new JobSnippet(job.getId(), job.getSourceId(), job.getSourceJobId()))
+                .collect(Collectors.toSet());
     }
 
 }

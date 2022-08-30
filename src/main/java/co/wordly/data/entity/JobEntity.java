@@ -6,7 +6,7 @@ import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -54,13 +54,13 @@ public class JobEntity {
     private final String sourceJobId;
 
     @Field(FIELD_PUBLISH_DATE)
-    private final Instant publishDate;
+    private final LocalDateTime publishDate;
 
     @PersistenceCreator
     private JobEntity(String id, String title,
                       String description, String salary,
                       String companyId, String url, String companyLogoUrl,
-                      String sourceId, String sourceJobId, Instant publishDate) {
+                      String sourceId, String sourceJobId, LocalDateTime publishDate) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -71,6 +71,12 @@ public class JobEntity {
         this.sourceId = sourceId;
         this.sourceJobId = sourceJobId;
         this.publishDate = publishDate;
+    }
+
+    public JobEntity withId(String id) {
+        return new JobEntity(id, this.title, this.description, this.salary,
+                this.companyId, this.url, this.companyLogoUrl,
+                this.sourceId, this.sourceJobId, this.publishDate);
     }
 
     @Override
@@ -125,7 +131,7 @@ public class JobEntity {
         return sourceJobId;
     }
 
-    public Instant getPublishDate() {
+    public LocalDateTime getPublishDate() {
         return publishDate;
     }
 
@@ -162,7 +168,7 @@ public class JobEntity {
         private String companyLogoUrl;
         private String sourceId;
         private String sourceJobId;
-        private Instant publishDate;
+        private LocalDateTime publishDate;
 
         public Builder title(String title) {
             this.title = title;
@@ -185,12 +191,16 @@ public class JobEntity {
         }
 
         public Builder url(String url) {
-            this.url = url;
+            if (Objects.nonNull(url)) {
+                this.url = url;
+            }
             return this;
         }
 
         public Builder companyLogoUrl(String companyLogoUrl) {
-            this.companyLogoUrl = companyLogoUrl;
+            if (Objects.nonNull(companyLogoUrl)) {
+                this.companyLogoUrl = companyLogoUrl;
+            }
             return this;
         }
 
@@ -203,7 +213,7 @@ public class JobEntity {
             return this;
         }
 
-        public Builder publishDate(Instant publishDate) {
+        public Builder publishDate(LocalDateTime publishDate) {
             this.publishDate = publishDate;
             return this;
         }

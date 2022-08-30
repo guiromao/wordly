@@ -1,17 +1,21 @@
 package co.wordly.scheduler;
 
+import co.wordly.configuration.JobsConfigurations;
 import co.wordly.data.converter.JobConverter;
-import co.wordly.data.dto.JobDto;
+import co.wordly.data.dto.apiresponse.ApiResponse;
 import co.wordly.data.entity.JobEntity;
+import co.wordly.service.CompanyService;
 import co.wordly.service.JobService;
 import co.wordly.service.SourceService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collection;
@@ -23,70 +27,86 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Component
 public class JobSearchScheduler {
 
-    private final Map<String, String> apisMap;
-    private final Map<String, String> apisNames;
+    private static final Logger LOG = LoggerFactory.getLogger(JobSearchScheduler.class);
+
     private final RestTemplate restTemplate;
     private final SourceService sourceService;
     private final JobService jobService;
+    private final CompanyService companyService;
     private final Map<String, JobConverter> jobConverterMap;
     private final Map<String, String> apis;
+    private final Map<String, Class<? extends ApiResponse>> returnedTypes;
 
     @Autowired
-    public JobSearchScheduler(@Value("#{${jobs.api.map}}") Map<String, String> apisMap,
-                              @Value("#{${jobs.api.names}}") Map<String, String> apisNames,
-                              RestTemplate restTemplate,
+    public JobSearchScheduler(RestTemplate restTemplate,
                               SourceService sourceService,
                               JobService jobService,
-                              Map<String, JobConverter> jobConverterMap,
-                              @Qualifier("apis") Map<String, String> apis) {
-        this.apisMap = apisMap;
-        this.apisNames = apisNames;
+                              CompanyService companyService,
+                              @Qualifier(JobsConfigurations.CONVERTERS) Map<String, JobConverter> jobConverterMap,
+                              @Qualifier(JobsConfigurations.APIS) Map<String, String> apis,
+                              @Qualifier(JobsConfigurations.RETURNED_TYPES)
+                                  Map<String, Class<? extends ApiResponse>> returnedTypes) {
         this.restTemplate = restTemplate;
         this.sourceService = sourceService;
         this.jobService = jobService;
+        this.companyService = companyService;
         this.jobConverterMap = jobConverterMap;
         this.apis = apis;
+        this.returnedTypes = returnedTypes;
     }
 
     @Scheduled(fixedDelay = 1000 * 60 * 60)
     public void fetchJobs() {
+        LOG.info("Updating existing Job sources...");
+        sourceService.handle(new HashSet<>(apis.keySet()));
+        LOG.info("Existing job sources update: done.");
+
+        LOG.info("Going to start a search Jobs task...");
         ExecutorService executor = Executors.newCachedThreadPool();
         executor.execute(this::searchTask);
     }
 
     private void searchTask() {
-        sourceService.handle(new HashSet<>(apisNames.values()));
-
         Set<JobEntity> jobEntities = apis.keySet().stream()
                 .map(this::getJobs)
                 .filter(Objects::nonNull)
                 .flatMap(Collection::stream)
                 .collect(Collectors.toSet());
 
+        LOG.info("Going to save jobs in Database...");
+
         // Save or update Jobs in Database
-        jobEntities.forEach(jobService::handleJob);
+        jobService.handleJobs(jobEntities);
+
+        LOG.info("Jobs saved.");
     }
 
     private Set<JobEntity> getJobs(String apiName) {
         final String apiUrl = apis.get(apiName);
+        final Class<? extends ApiResponse> apiResponseClass = returnedTypes.get(apiName);
 
-        ResponseEntity<JobDto[]> jobsResponse = restTemplate.exchange(apiUrl, HttpMethod.GET, null, JobDto[].class);
+        LOG.info("Searching for jobs in: {}", apiName);
 
-        if (Objects.isNull(jobsResponse.getBody())) {
+        ResponseEntity<? extends ApiResponse> jobsResponse =
+                restTemplate.exchange(apiUrl, HttpMethod.GET, null, apiResponseClass);
+
+        if (Objects.isNull(jobsResponse.getBody()) || CollectionUtils.isEmpty(jobsResponse.getBody().getJobs())) {
             return Collections.emptySet();
         }
 
-        Set<JobDto> jobDtos = Stream.of(jobsResponse.getBody()).collect(Collectors.toSet());
+        LOG.info("Found {} jobs in {}", jobsResponse.getBody().getJobs().size(), apiName);
+
+        LOG.info("Handling companies found in fetched jobs...");
+        companyService.handleCompaniesOf(jobsResponse.getBody());
+        LOG.info("Handling found companies: done.");
+
         JobConverter converter = jobConverterMap.get(apiName);
 
-        return jobDtos.stream()
-                .map(converter::convert)
-                .collect(Collectors.toSet());
+        return converter.convert(jobsResponse.getBody());
     }
 
 }
