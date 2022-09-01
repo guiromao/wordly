@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -29,21 +30,26 @@ public class RemotiveJobConverter extends JobConverter {
 
     @Override
     public Set<JobEntity> convert(ApiResponse apiResponse) {
+        final String sourceId = sourceRepository.findByName(JobsConfigurations.REMOTIVE)
+                .map(SourceEntity::getId)
+                .orElse(null);
         Set<JobDto> jobDtos = apiResponse.getJobs();
+        Set<String> companyNames = jobDtos.stream()
+                .map(JobDto::getCompanyName)
+                .collect(Collectors.toSet());
+        List<CompanyEntity> companies = companyRepository.findByNames(companyNames);
 
         return jobDtos.stream()
-                .map(this::createEntity)
+                .map(dto -> createEntity(dto, sourceId, companies))
                 .collect(Collectors.toSet());
     }
 
-    private JobEntity createEntity(JobDto jobDto) {
-        String sourceId = sourceRepository.findByName(JobsConfigurations.REMOTIVE)
-                .map(SourceEntity::getId)
-                .orElse(null);
-
-        String companyId = companyRepository.findByName(jobDto.getCompanyName())
+    private JobEntity createEntity(JobDto jobDto, String sourceId, List<CompanyEntity> companies) {
+        String companyId = companies.stream()
+                .filter(company -> company.getName().equals(jobDto.getCompanyName()))
                 .map(CompanyEntity::getId)
-                .orElse(null);
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Company not found"));
 
         return new JobEntity.Builder()
                 .title(jobDto.getTitle())

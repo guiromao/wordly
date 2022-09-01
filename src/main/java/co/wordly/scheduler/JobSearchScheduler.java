@@ -4,6 +4,7 @@ import co.wordly.configuration.JobsConfigurations;
 import co.wordly.data.converter.JobConverter;
 import co.wordly.data.dto.apiresponse.ApiResponse;
 import co.wordly.data.entity.JobEntity;
+import co.wordly.service.CompanyManager;
 import co.wordly.service.CompanyService;
 import co.wordly.service.JobService;
 import co.wordly.service.SourceService;
@@ -37,6 +38,7 @@ public class JobSearchScheduler {
     private final SourceService sourceService;
     private final JobService jobService;
     private final CompanyService companyService;
+    private final CompanyManager companyManager;
     private final Map<String, JobConverter> jobConverterMap;
     private final Map<String, String> apis;
     private final Map<String, Class<? extends ApiResponse>> returnedTypes;
@@ -46,6 +48,7 @@ public class JobSearchScheduler {
                               SourceService sourceService,
                               JobService jobService,
                               CompanyService companyService,
+                              CompanyManager companyManager,
                               @Qualifier(JobsConfigurations.CONVERTERS) Map<String, JobConverter> jobConverterMap,
                               @Qualifier(JobsConfigurations.APIS) Map<String, String> apis,
                               @Qualifier(JobsConfigurations.RETURNED_TYPES)
@@ -54,6 +57,7 @@ public class JobSearchScheduler {
         this.sourceService = sourceService;
         this.jobService = jobService;
         this.companyService = companyService;
+        this.companyManager = companyManager;
         this.jobConverterMap = jobConverterMap;
         this.apis = apis;
         this.returnedTypes = returnedTypes;
@@ -61,6 +65,10 @@ public class JobSearchScheduler {
 
     @Scheduled(fixedDelay = 1000 * 60 * 60)
     public void fetchJobs() {
+        LOG.info("Fetching list of companies...");
+        companyManager.startupCompanies();
+        LOG.info("List of companies: fetched.");
+
         LOG.info("Updating existing Job sources...");
         sourceService.handle(new HashSet<>(apis.keySet()));
         LOG.info("Existing job sources update: done.");
@@ -101,7 +109,7 @@ public class JobSearchScheduler {
         LOG.info("Found {} jobs in {}", jobsResponse.getBody().getJobs().size(), apiName);
 
         LOG.info("Handling companies found in fetched jobs...");
-        companyService.handleCompaniesOf(jobsResponse.getBody());
+        companyService.handleCompaniesOf(jobsResponse.getBody().getJobs(), sourceService.getIdFromName(apiName));
         LOG.info("Handling found companies: done.");
 
         JobConverter converter = jobConverterMap.get(apiName);

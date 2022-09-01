@@ -35,6 +35,20 @@ public class SourceServiceImpl implements SourceService {
         }
     }
 
+    @Override
+    public String getIdFromName(String name) {
+        return sourceRepository.findByName(name)
+                .map(SourceEntity::getId)
+                .orElse("");
+    }
+
+    @Override
+    public String getNameFromId(String id) {
+        return sourceRepository.findById(id)
+                .map(SourceEntity::getName)
+                .orElse(null);
+    }
+
     private Set<String> getNonExisting(List<SourceEntity> existingSources, Set<String> sourceNames) {
         Set<String> existingSet = existingSources.stream()
                 .map(SourceEntity::getName)

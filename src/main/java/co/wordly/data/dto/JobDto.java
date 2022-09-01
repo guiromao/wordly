@@ -7,6 +7,7 @@ public class JobDto {
     private final String title;
     private final String description;
     private final String salary;
+    private final String companyId;
     private final String companyName;
     private final String url;
     private final String companyUrl;
@@ -15,11 +16,13 @@ public class JobDto {
     private final String sourceJobId;
     private final String publishDate;
 
-    private JobDto(String title, String description, String salary, String companyName, String url, String companyUrl, String companyLogoUrl,
+    private JobDto(String title, String description, String salary,
+                   String companyId, String companyName, String url, String companyUrl, String companyLogoUrl,
                   String sourceId, String sourceJobId, String publishDate) {
         this.title = title;
         this.description = description;
         this.salary = salary;
+        this.companyId = companyId;
         this.companyName = companyName;
         this.url = url;
         this.companyUrl = companyUrl;
@@ -35,6 +38,7 @@ public class JobDto {
                 "title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", salary='" + salary + '\'' +
+                ", companyId='" + companyId + '\'' +
                 ", companyName='" + companyName + '\'' +
                 ", url='" + url + '\'' +
                 ", companyUrl='" + companyUrl + '\'' +
@@ -55,6 +59,10 @@ public class JobDto {
 
     public String getSalary() {
         return salary;
+    }
+
+    public String getCompanyId() {
+        return companyId;
     }
 
     public String getCompanyName() {
@@ -112,6 +120,7 @@ public class JobDto {
         private String title;
         private String description;
         private String salary;
+        private String companyId;
         private String companyName;
         private String url;
         private String companyUrl;
@@ -132,6 +141,11 @@ public class JobDto {
 
         public Builder salary(String salary) {
             this.salary = salary;
+            return this;
+        }
+
+        public Builder companyId(String companyId) {
+            this.companyId = companyId;
             return this;
         }
 
@@ -172,7 +186,7 @@ public class JobDto {
 
         public JobDto build() {
             return new JobDto(
-                    title, description, salary, companyName, url,
+                    title, description, salary, companyId, companyName, url,
                     companyUrl, companyLogoUrl, sourceId,
                     sourceJobId, publishDate
             );

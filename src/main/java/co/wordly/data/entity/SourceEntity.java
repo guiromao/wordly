@@ -3,6 +3,7 @@ package co.wordly.data.entity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.annotation.TypeAlias;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -12,6 +13,8 @@ import java.util.UUID;
 // Class to represent the Website where the Job is collected from
 @Document(value = SourceEntity.SOURCE_COLLECTION)
 @TypeAlias(SourceEntity.SOURCE_COLLECTION)
+@CompoundIndex(name = "idx_name_text", def = "{'name': 'text'}")
+@CompoundIndex(name = "idx_name", def = "{'name': 1}")
 public class SourceEntity {
 
     private static final String FIELD_NAME = "name";
