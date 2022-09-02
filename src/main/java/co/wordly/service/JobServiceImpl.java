@@ -1,11 +1,15 @@
 package co.wordly.service;
 
+import co.wordly.data.converter.PlatformJobConverter;
+import co.wordly.data.dto.api.PlatformJobDto;
 import co.wordly.data.entity.JobEntity;
 import co.wordly.data.model.JobSnippet;
 import co.wordly.data.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -28,6 +32,14 @@ public class JobServiceImpl implements JobService {
                 .collect(Collectors.toSet());
 
         jobRepository.saveAll(jobsToSave);
+    }
+
+    @Override
+    public Set<PlatformJobDto> fetchJobs(String searchText, LocalDateTime fromDate,
+                                         LocalDateTime toDate, int offset, int limit) {
+        List<JobEntity> jobs = jobRepository.fetchJobs(searchText, fromDate, toDate, offset, limit);
+
+        return PlatformJobConverter.convert(jobs);
     }
 
     private JobEntity updateJob(Set<JobSnippet> jobIds, JobEntity job) {

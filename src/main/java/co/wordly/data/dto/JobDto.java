@@ -18,7 +18,7 @@ public class JobDto {
 
     private JobDto(String title, String description, String salary,
                    String companyId, String companyName, String url, String companyUrl, String companyLogoUrl,
-                  String sourceId, String sourceJobId, String publishDate) {
+                   String sourceId, String sourceJobId, String publishDate) {
         this.title = title;
         this.description = description;
         this.salary = salary;

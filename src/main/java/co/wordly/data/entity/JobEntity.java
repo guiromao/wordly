@@ -14,7 +14,9 @@ import java.util.UUID;
 
 @Document(value = JobEntity.JOB_COLLECTION)
 @TypeAlias(JobEntity.JOB_COLLECTION)
-@CompoundIndex(name = "idx_text_search", def = "{'title': 'text', 'description': 'text'}")
+@CompoundIndex(name = "idx_text_search", def = "{'title': 'text', 'description': 'text'," +
+        "'companyName': 'text'}")
+@CompoundIndex(name = "idx_publish_date", def = "{'publishDate': -1}")
 public class JobEntity {
 
     private static final String FIELD_TITLE = "title";

@@ -3,6 +3,8 @@ package co.wordly.data.repository;
 import co.wordly.data.entity.JobEntity;
 import co.wordly.data.model.JobSnippet;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 public interface JobRepositoryCustom {
@@ -13,5 +15,8 @@ public interface JobRepositoryCustom {
     // Example: if "Remotive" has SourceId of "1", and Job X has job ID "job-1",
     // then one element of the map will be { "1": "job-1" }
     Set<JobSnippet> getSourceJobIdsDetails();
+
+    List<JobEntity> fetchJobs(String searchText, LocalDateTime fromDate,
+                              LocalDateTime toDate, int offset, int limit);
 
 }
