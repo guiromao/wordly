@@ -1,9 +1,11 @@
 package co.wordly.configuration;
 
+import co.wordly.data.converter.HymalaiasJobConverter;
 import co.wordly.data.converter.JobConverter;
 import co.wordly.data.converter.LandingJobsJobConverter;
 import co.wordly.data.converter.RemotiveJobConverter;
 import co.wordly.data.dto.apiresponse.ApiResponse;
+import co.wordly.data.dto.apiresponse.HymalaiasAppResponse;
 import co.wordly.data.dto.apiresponse.LandingJobsResponseDto;
 import co.wordly.data.dto.apiresponse.RemotiveJobsDto;
 import co.wordly.data.dto.apiresponse.company.ApiCompanyResponse;
@@ -20,7 +22,7 @@ public class JobsConfigurations {
 
     public static final String REMOTIVE = "Remotive";
     public static final String LANDING_JOBS = "Landing Jobs";
-    public static final String REMOTE_OK = "Remote Ok";
+    public static final String HYMALAIAS_APP = "Hymalaias App";
 
     public static final String JOB_SITES = "jobSites";
     public static final String APIS = "apis";
@@ -31,25 +33,29 @@ public class JobsConfigurations {
 
     private final RemotiveJobConverter remotiveJobConverter;
     private final LandingJobsJobConverter landingsJobsConverter;
+    private final HymalaiasJobConverter hymalaiasJobConverter;
 
     @Autowired
     public JobsConfigurations(RemotiveJobConverter remotiveJobConverter,
-                              LandingJobsJobConverter landingsJobsConverter) {
+                              LandingJobsJobConverter landingsJobsConverter,
+                              HymalaiasJobConverter hymalaiasJobConverter) {
         this.remotiveJobConverter = remotiveJobConverter;
         this.landingsJobsConverter = landingsJobsConverter;
+        this.hymalaiasJobConverter = hymalaiasJobConverter;
     }
 
     @Bean(name = CONVERTERS)
     public Map<String, JobConverter> convertersMap() {
         return Map.of(
                 REMOTIVE, remotiveJobConverter,
-                LANDING_JOBS, landingsJobsConverter
+                LANDING_JOBS, landingsJobsConverter,
+                HYMALAIAS_APP, hymalaiasJobConverter
         );
     }
 
     @Bean(name = JOB_SITES)
     public Set<String> jobSites() {
-        return Set.of(REMOTIVE, LANDING_JOBS, REMOTE_OK);
+        return Set.of(REMOTIVE, LANDING_JOBS, HYMALAIAS_APP);
     }
 
     @Bean(name = APIS)
@@ -57,7 +63,7 @@ public class JobsConfigurations {
         return Map.of(
                 REMOTIVE, "https://remotive.com/api/remote-jobs?category=software-dev",
                 LANDING_JOBS, "https://landing.jobs/api/v1/jobs?remote=true",
-                REMOTE_OK, "https://remoteok.com/api"
+                HYMALAIAS_APP, "https://himalayas.app/jobs/api"
         );
     }
 
@@ -65,7 +71,8 @@ public class JobsConfigurations {
     public Map<String, Class<? extends ApiResponse>> sourceReturnedObjects() {
         return Map.of(
                 REMOTIVE, RemotiveJobsDto.class,
-                LANDING_JOBS, LandingJobsResponseDto.class
+                LANDING_JOBS, LandingJobsResponseDto.class,
+                HYMALAIAS_APP, HymalaiasAppResponse.class
         );
     }
 
