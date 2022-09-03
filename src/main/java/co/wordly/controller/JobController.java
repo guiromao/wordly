@@ -3,6 +3,8 @@ package co.wordly.controller;
 import co.wordly.data.dto.api.PlatformJobDto;
 import co.wordly.service.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,8 +26,10 @@ public class JobController {
 
     @GetMapping
     public Set<PlatformJobDto> getJobs(@RequestParam(value = "text", required = false) String text,
-                                       @RequestParam(value = "fromDate", required = false) LocalDateTime fromDate,
-                                       @RequestParam(value = "toDate", required = false) LocalDateTime toDate,
+                                       @RequestParam(value = "fromDate", required = false)
+                                       @DateTimeFormat(iso = ISO.DATE_TIME) LocalDateTime fromDate,
+                                       @RequestParam(value = "toDate", required = false)
+                                       @DateTimeFormat(iso = ISO.DATE_TIME) LocalDateTime toDate,
                                        @RequestParam(value = "offset") Integer offset,
                                        @RequestParam(value = "limit") Integer limit) {
         return jobService.fetchJobs(text, fromDate, toDate, offset, limit);

@@ -25,9 +25,9 @@ public class EmailEntity {
     private final Set<String> preferredTerms;
 
     @PersistenceCreator
-    public EmailEntity(String email, Set<String> terms) {
+    public EmailEntity(String email, Set<String> preferredTerms) {
         this.email = email;
-        this.preferredTerms = terms;
+        this.preferredTerms = preferredTerms;
     }
 
     public String getEmail() {

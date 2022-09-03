@@ -1,0 +1,78 @@
+package co.wordly.scheduler;
+
+import co.wordly.data.entity.EmailEntity;
+import co.wordly.data.entity.JobEntity;
+import co.wordly.data.repository.EmailRepository;
+import co.wordly.data.repository.JobRepository;
+import co.wordly.service.EmailSender;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+/*
+    Class that will send newly added Jobs, once a day, to the users that
+    subscribed to the newsletter.
+ */
+@Component
+public class EmailSendScheduler {
+
+    private static final Logger LOG = LoggerFactory.getLogger(EmailSendScheduler.class);
+
+    private EmailSender emailSender;
+    private final EmailRepository emailRepository;
+    private final JobRepository jobRepository;
+
+    @Autowired
+    public EmailSendScheduler(EmailSender emailSender,
+                              EmailRepository emailRepository,
+                              JobRepository jobRepository) {
+        this.emailSender = emailSender;
+        this.emailRepository = emailRepository;
+        this.jobRepository = jobRepository;
+    }
+
+    @Scheduled(fixedDelay = 1000 * 60 * 60 * 24)
+    public void sendEmails() {
+        ExecutorService executor = Executors.newCachedThreadPool();
+        executor.execute(this::emailSendingTask);
+    }
+
+    private void emailSendingTask() {
+        LOG.info("Starting to send emails for today's jobs...");
+
+        List<JobEntity> todaysJobs = jobRepository.fetchTodayJobs();
+        List<EmailEntity> emailAccounts = emailRepository.findAll();
+
+        LOG.info("There are {} new jobs today", todaysJobs.size());
+
+        emailAccounts
+                .forEach(account -> emailSender.send(account.getEmail(), filterJobsForUser(todaysJobs, account)));
+
+        LOG.info("Send today jobs task done.");
+    }
+
+    private Set<JobEntity> filterJobsForUser(List<JobEntity> jobs, EmailEntity account) {
+        return jobs.stream()
+                .filter(job -> doesJobContainTerms(job, account.getPreferredTerms()))
+                .collect(Collectors.toSet());
+    }
+
+    private boolean doesJobContainTerms(JobEntity job, Set<String> terms) {
+        String text = String.join(" ", job.getTitle().toLowerCase(),
+                job.getDescription().toLowerCase());
+
+        return terms.stream()
+                .map(String::toLowerCase)
+                .anyMatch(text::contains);
+    }
+
+}

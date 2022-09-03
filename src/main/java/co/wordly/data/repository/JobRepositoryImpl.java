@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -24,6 +25,7 @@ public class JobRepositoryImpl implements JobRepositoryCustom {
     private static final String KEY_SOURCE_ID = "sourceId";
     private static final String KEY_SOURCE_JOB_ID = "sourceJobId";
     private static final String KEY_PUBLISH_DATE = "publishDate";
+    private static final String KEY_CREATION_DATE = "creationDate";
 
     private final MongoTemplate mongoTemplate;
 
@@ -68,6 +70,15 @@ public class JobRepositoryImpl implements JobRepositoryCustom {
         query = query.with(Sort.by(KEY_PUBLISH_DATE).descending())
                 .skip(offset)
                 .limit(limit);
+
+        return mongoTemplate.find(query, JobEntity.class);
+    }
+
+    @Override
+    public List<JobEntity> fetchTodayJobs() {
+        LocalDateTime today = LocalDate.now().atStartOfDay();
+        Criteria todayCriteria = Criteria.where(KEY_CREATION_DATE).gte(today);
+        Query query = new Query(todayCriteria);
 
         return mongoTemplate.find(query, JobEntity.class);
     }

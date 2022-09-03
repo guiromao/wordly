@@ -19,4 +19,6 @@ public interface JobRepositoryCustom {
     List<JobEntity> fetchJobs(String searchText, LocalDateTime fromDate,
                               LocalDateTime toDate, int offset, int limit);
 
+    List<JobEntity> fetchTodayJobs();
+
 }
