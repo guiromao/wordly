@@ -1,11 +1,13 @@
 package co.wordly.service;
 
+import co.wordly.configuration.RedisConfiguration;
 import co.wordly.data.converter.PlatformJobConverter;
 import co.wordly.data.dto.api.PlatformJobDto;
 import co.wordly.data.entity.JobEntity;
 import co.wordly.data.model.JobSnippet;
 import co.wordly.data.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -34,10 +36,11 @@ public class JobServiceImpl implements JobService {
         jobRepository.saveAll(jobsToSave);
     }
 
+    @Cacheable(value = RedisConfiguration.CACHE_SEARCH_JOBS)
     @Override
-    public Set<PlatformJobDto> fetchJobs(String searchText, LocalDateTime fromDate,
+    public Set<PlatformJobDto> fetchJobs(Set<String> keywords, LocalDateTime fromDate,
                                          LocalDateTime toDate, int offset, int limit) {
-        List<JobEntity> jobs = jobRepository.fetchJobs(searchText, fromDate, toDate, offset, limit);
+        List<JobEntity> jobs = jobRepository.fetchJobs(keywords, fromDate, toDate, offset, limit);
 
         return PlatformJobConverter.convert(jobs);
     }

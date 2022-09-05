@@ -10,7 +10,7 @@ public interface JobService {
 
     void handleJobs(Set<JobEntity> jobs);
 
-    Set<PlatformJobDto> fetchJobs(String searchText, LocalDateTime fromDate,
+    Set<PlatformJobDto> fetchJobs(Set<String> keywords, LocalDateTime fromDate,
                                   LocalDateTime toDate, int offset, int limit);
 
 }

@@ -62,15 +62,15 @@ public class EmailSendScheduler {
 
     private Set<JobEntity> filterJobsForUser(List<JobEntity> jobs, EmailEntity account) {
         return jobs.stream()
-                .filter(job -> doesJobContainTerms(job, account.getPreferredTerms()))
+                .filter(job -> doesJobContainTerms(job, account.getKeywords()))
                 .collect(Collectors.toSet());
     }
 
-    private boolean doesJobContainTerms(JobEntity job, Set<String> terms) {
+    private boolean doesJobContainTerms(JobEntity job, Set<String> keywords) {
         String text = String.join(" ", job.getTitle().toLowerCase(),
                 job.getDescription().toLowerCase());
 
-        return terms.stream()
+        return keywords.stream()
                 .map(String::toLowerCase)
                 .anyMatch(text::contains);
     }

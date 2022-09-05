@@ -25,14 +25,14 @@ public class JobController {
     }
 
     @GetMapping
-    public Set<PlatformJobDto> getJobs(@RequestParam(value = "text", required = false) String text,
+    public Set<PlatformJobDto> getJobs(@RequestParam(value = "keywords", required = false) Set<String> keywords,
                                        @RequestParam(value = "fromDate", required = false)
                                        @DateTimeFormat(iso = ISO.DATE_TIME) LocalDateTime fromDate,
                                        @RequestParam(value = "toDate", required = false)
                                        @DateTimeFormat(iso = ISO.DATE_TIME) LocalDateTime toDate,
                                        @RequestParam(value = "offset") Integer offset,
                                        @RequestParam(value = "limit") Integer limit) {
-        return jobService.fetchJobs(text, fromDate, toDate, offset, limit);
+        return jobService.fetchJobs(keywords, fromDate, toDate, offset, limit);
     }
 
 }

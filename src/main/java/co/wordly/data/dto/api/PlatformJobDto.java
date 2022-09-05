@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @JsonPropertyOrder(alphabetic = true)
@@ -12,14 +13,16 @@ import java.time.LocalDateTime;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY,
         getterVisibility = JsonAutoDetect.Visibility.NONE,
         isGetterVisibility = JsonAutoDetect.Visibility.NONE)
-public record PlatformJobDto(@JsonProperty(PROPERTY_ID) String id,
+public record PlatformJobDto (@JsonProperty(PROPERTY_ID) String id,
                              @JsonProperty(PROPERTY_TITLE) String title,
                              @JsonProperty(PROPERTY_DESCRIPTION) String description,
                              @JsonProperty(PROPERTY_COMPANY_NAME) String companyName,
                              @JsonProperty(PROPERTY_COMPANY_LOGO_URL) String companyLogoUrl,
                              @JsonProperty(PROPERTY_SALARY) String salary,
                              @JsonProperty(PROPERTY_URL) String url,
-                             @JsonProperty(PROPERTY_PUBLISH_DATE) LocalDateTime publishDate) {
+                             @JsonProperty(PROPERTY_PUBLISH_DATE) LocalDateTime publishDate) implements Serializable {
+
+    private static final Long serialId = 2L;
 
     private static final String PROPERTY_ID = "id";
     private static final String PROPERTY_TITLE = "title";

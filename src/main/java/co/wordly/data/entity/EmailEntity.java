@@ -13,7 +13,7 @@ import java.util.Set;
 @TypeAlias(EmailEntity.EMAIL_COLLECTION)
 public class EmailEntity {
 
-    private static final String FIELD_PREFERRED_TERMS = "preferredTerms";
+    private static final String FIELD_KEYWORDS = "keywords";
 
     public static final String EMAIL_COLLECTION = "email";
 
@@ -21,28 +21,28 @@ public class EmailEntity {
     private final String email;
 
     // Field to store the terms that the user looks for (eg, "Java", "Backend", etc)
-    @Field(FIELD_PREFERRED_TERMS)
-    private final Set<String> preferredTerms;
+    @Field(FIELD_KEYWORDS)
+    private final Set<String> keywords;
 
     @PersistenceCreator
-    public EmailEntity(String email, Set<String> preferredTerms) {
+    public EmailEntity(String email, Set<String> keywords) {
         this.email = email;
-        this.preferredTerms = preferredTerms;
+        this.keywords = keywords;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public Set<String> getPreferredTerms() {
-        return preferredTerms;
+    public Set<String> getKeywords() {
+        return keywords;
     }
 
     @Override
     public String toString() {
         return "EmailEntity{" +
                 "email='" + email + '\'' +
-                ", preferredTerms=" + preferredTerms +
+                ", keywords=" + keywords +
                 '}';
     }
 
@@ -55,12 +55,12 @@ public class EmailEntity {
             return false;
         }
         EmailEntity that = (EmailEntity) o;
-        return email.equals(that.email) && Objects.equals(preferredTerms, that.preferredTerms);
+        return email.equals(that.email) && Objects.equals(keywords, that.keywords);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(email, preferredTerms);
+        return Objects.hash(email, keywords);
     }
 
 }

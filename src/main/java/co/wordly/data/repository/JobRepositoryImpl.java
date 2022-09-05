@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.StringUtils;
+import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -52,18 +52,18 @@ public class JobRepositoryImpl implements JobRepositoryCustom {
     }
 
     @Override
-    public List<JobEntity> fetchJobs(String searchText, LocalDateTime fromDate,
+    public List<JobEntity> fetchJobs(Set<String> keywords, LocalDateTime fromDate,
                                      LocalDateTime toDate, int offset, int limit) {
-        Criteria datesCriteria;
         Query query = new Query();
 
         if (Objects.nonNull(fromDate) || Objects.nonNull(toDate)) {
-            datesCriteria = generateDatesCriteria(fromDate, toDate);
+            Criteria datesCriteria = generateDatesCriteria(fromDate, toDate);
             query.addCriteria(datesCriteria);
         }
 
-        if (StringUtils.hasText(searchText)) {
-            TextCriteria textCriteria = TextCriteria.forDefaultLanguage().matching(searchText);
+        if (!CollectionUtils.isEmpty(keywords)) {
+            String[] terms = new String[keywords.size()];
+            TextCriteria textCriteria = TextCriteria.forDefaultLanguage().matchingAny(keywords.toArray(terms));
             query.addCriteria(textCriteria);
         }
 

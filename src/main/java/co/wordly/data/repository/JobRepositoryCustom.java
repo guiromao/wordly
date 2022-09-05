@@ -16,7 +16,7 @@ public interface JobRepositoryCustom {
     // then one element of the map will be { "1": "job-1" }
     Set<JobSnippet> getSourceJobIdsDetails();
 
-    List<JobEntity> fetchJobs(String searchText, LocalDateTime fromDate,
+    List<JobEntity> fetchJobs(Set<String> keywords, LocalDateTime fromDate,
                               LocalDateTime toDate, int offset, int limit);
 
     List<JobEntity> fetchTodayJobs();
