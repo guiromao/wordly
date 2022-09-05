@@ -13,11 +13,12 @@ import java.time.Duration;
 public class RedisConfiguration {
 
     public static final String CACHE_SEARCH_JOBS = "cacheSearchJobs";
+    public static final Long CACHE_TTL_IN_MINUTES = 20L;
 
     @Bean
     public RedisCacheConfiguration redisCacheConfiguration() {
         return RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofMinutes(20L))
+                .entryTtl(Duration.ofMinutes(CACHE_TTL_IN_MINUTES))
                 .disableCachingNullValues()
                 .serializeValuesWith(SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
     }
@@ -26,7 +27,7 @@ public class RedisConfiguration {
     public RedisCacheManagerBuilderCustomizer redisCustomizer() {
         return builder -> {
             builder.withCacheConfiguration(CACHE_SEARCH_JOBS,
-                    RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(20L)));
+                    RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(CACHE_TTL_IN_MINUTES)));
         };
     }
 
