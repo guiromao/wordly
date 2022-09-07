@@ -5,7 +5,6 @@ import co.wordly.data.entity.JobEntity;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -48,7 +47,8 @@ public class PlatformJobConverter {
             stringBuilder.append("Salary: ").append(job.getSalary()).append("\n");
         }
 
-        return stringBuilder.append("Publish Date: ").append(job.getPublishDate()).toString();
+        return stringBuilder.append("Publish Date: \n").append(job.getPublishDate())
+                .append("\n\n###########################\n\n\n").toString();
     }
 
 }

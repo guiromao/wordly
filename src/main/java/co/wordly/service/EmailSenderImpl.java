@@ -9,17 +9,22 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Set;
 
 @Service
 @PropertySource("credentials.properties")
 public class EmailSenderImpl implements EmailSender {
 
-    private static Logger LOG = LoggerFactory.getLogger(EmailSenderImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(EmailSenderImpl.class);
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("E, MMM dd yyyy");
 
     private final JavaMailSender mailSender;
     private String wordlyAccount;
@@ -35,20 +40,22 @@ public class EmailSenderImpl implements EmailSender {
         if (!CollectionUtils.isEmpty(jobs)) {
             LOG.info("Going to send an email with {} jobs to: {}", jobs.size(), toEmail);
 
-            String title = "Today's Jobs!!! <"  + LocalDate.now() + ">";
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, "utf-8");
+            String formattedTime = DATE_FORMATTER.format(LocalDate.now());
+            String title = "Today's Jobs!!! <"  + formattedTime + ">";
             String message = PlatformJobConverter.convertToEmailList(jobs);
 
-            SimpleMailMessage email = new SimpleMailMessage();
-            email.setFrom(wordlyAccount);
-            email.setTo(toEmail);
-            email.setSubject(title);
-            email.setText(message);
-
             try {
-                mailSender.send(email);
+                mimeMessage.setContent(message, "text/html");
+                messageHelper.setFrom(wordlyAccount);
+                messageHelper.setTo(toEmail);
+                messageHelper.setSubject(title);
+
+                mailSender.send(mimeMessage);
                 LOG.info("Email successfully sent to: {}", toEmail);
 
-            } catch (MailException e) {
+            } catch (MailException | MessagingException e) {
                 LOG.warn("Could not send email message to: {}\n" +
                         "For reason {}", toEmail, e);
             }
