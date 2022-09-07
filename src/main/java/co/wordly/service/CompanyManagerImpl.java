@@ -43,15 +43,16 @@ public class CompanyManagerImpl implements CompanyManager {
                 .forEach(this::handleCompanies);
     }
 
+    // Creates companies in the Application, for API's that have separated endpoints for exposing companies
     private void handleCompanies(Map.Entry<String, SourceComponent> sourceComponentEntry) {
         String apiName = sourceComponentEntry.getKey();
         SourceComponent sourceComponent = sourceComponentEntry.getValue();
         String apiUrl = sourceComponent.getCompanyApiUrl();
         String sourceId = sourceService.getIdFromName(apiName);
-        Class<? extends ApiCompanyResponse> companyDto = sourceComponent.getCompaniesResponse();
+        Class<? extends ApiCompanyResponse> companiesDto = sourceComponent.getCompaniesResponse();
 
         ResponseEntity<? extends ApiCompanyResponse> response =
-                restTemplate.exchange(apiUrl, HttpMethod.GET, null, companyDto);
+                restTemplate.exchange(apiUrl, HttpMethod.GET, null, companiesDto);
 
         if (Objects.nonNull(response.getBody()) && !CollectionUtils.isEmpty(response.getBody().getCompanyDtos())) {
             Set<CompanyDto> companies = response.getBody().getCompanyDtos();

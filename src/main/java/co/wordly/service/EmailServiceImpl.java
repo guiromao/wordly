@@ -1,5 +1,6 @@
 package co.wordly.service;
 
+import co.wordly.ResourceNotFoundException;
 import co.wordly.data.converter.EmailConverter;
 import co.wordly.data.dto.api.EmailDto;
 import co.wordly.data.entity.EmailEntity;
@@ -27,7 +28,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public EmailDto getEmail(String email) {
         EmailEntity emailEntity = emailRepository.findById(email)
-                .orElseThrow(() -> new RuntimeException("Email " + email + " not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(EmailEntity.class, email));
 
         return EmailConverter.toDto(emailEntity);
     }
