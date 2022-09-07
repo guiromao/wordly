@@ -1,6 +1,6 @@
 package co.wordly.scheduler;
 
-import co.wordly.configuration.JobsConfigurations;
+import co.wordly.component.SourceComponent;
 import co.wordly.data.converter.JobConverter;
 import co.wordly.data.dto.apiresponse.ApiResponse;
 import co.wordly.data.entity.JobEntity;
@@ -11,7 +11,6 @@ import co.wordly.service.SourceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,7 +20,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -39,9 +37,7 @@ public class JobSearchScheduler {
     private final JobService jobService;
     private final CompanyService companyService;
     private final CompanyManager companyManager;
-    private final Map<String, JobConverter> jobConverterMap;
-    private final Map<String, String> apis;
-    private final Map<String, Class<? extends ApiResponse>> returnedTypes;
+    private final Map<String, SourceComponent> sourceComponents;
 
     @Autowired
     public JobSearchScheduler(RestTemplate restTemplate,
@@ -49,18 +45,13 @@ public class JobSearchScheduler {
                               JobService jobService,
                               CompanyService companyService,
                               CompanyManager companyManager,
-                              @Qualifier(JobsConfigurations.CONVERTERS) Map<String, JobConverter> jobConverterMap,
-                              @Qualifier(JobsConfigurations.APIS) Map<String, String> apis,
-                              @Qualifier(JobsConfigurations.RETURNED_TYPES)
-                                  Map<String, Class<? extends ApiResponse>> returnedTypes) {
+                              Map<String, SourceComponent> sourceComponents) {
         this.restTemplate = restTemplate;
         this.sourceService = sourceService;
         this.jobService = jobService;
         this.companyService = companyService;
         this.companyManager = companyManager;
-        this.jobConverterMap = jobConverterMap;
-        this.apis = apis;
-        this.returnedTypes = returnedTypes;
+        this.sourceComponents = sourceComponents;
     }
 
     @Scheduled(fixedDelay = 1000 * 60 * 60)
@@ -70,7 +61,7 @@ public class JobSearchScheduler {
         LOG.info("List of companies: fetched.");
 
         LOG.info("Updating existing Job sources...");
-        sourceService.handle(new HashSet<>(apis.keySet()));
+        sourceService.handle(sourceComponents.keySet());
         LOG.info("Existing job sources update: done.");
 
         LOG.info("Going to start a search Jobs task...");
@@ -79,7 +70,7 @@ public class JobSearchScheduler {
     }
 
     private void searchTask() {
-        Set<JobEntity> jobEntities = apis.keySet().stream()
+        Set<JobEntity> jobEntities = sourceComponents.entrySet().stream()
                 .map(this::getJobs)
                 .filter(Objects::nonNull)
                 .flatMap(Collection::stream)
@@ -93,9 +84,11 @@ public class JobSearchScheduler {
         LOG.info("Jobs saved.");
     }
 
-    private Set<JobEntity> getJobs(String apiName) {
-        final String apiUrl = apis.get(apiName);
-        final Class<? extends ApiResponse> apiResponseClass = returnedTypes.get(apiName);
+    private Set<JobEntity> getJobs(Map.Entry<String, SourceComponent> sourceComponentEntry) {
+        final SourceComponent sourceComponent = sourceComponentEntry.getValue();
+        final String apiUrl = sourceComponent.getApiUrl();
+        final Class<? extends ApiResponse> apiResponseClass = sourceComponent.getReturnedObjects();
+        final String apiName = sourceComponentEntry.getKey();
 
         LOG.info("Searching for jobs in: {}", apiName);
 
@@ -112,7 +105,7 @@ public class JobSearchScheduler {
         companyService.handleCompaniesOf(jobsResponse.getBody().getJobs(), sourceService.getIdFromName(apiName));
         LOG.info("Handling found companies: done.");
 
-        JobConverter converter = jobConverterMap.get(apiName);
+        JobConverter converter = sourceComponent.getConverter();
 
         return converter.convert(jobsResponse.getBody());
     }

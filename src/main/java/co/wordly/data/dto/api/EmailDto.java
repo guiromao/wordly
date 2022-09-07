@@ -9,16 +9,16 @@ import java.util.Set;
 public class EmailDto {
 
     private static final String PROPERTY_EMAIL = "email";
-    private static final String PROPERTY_TERMS = "terms";
+    private static final String PROPERTY_KEYWORDS = "keywords";
 
     private final String email;
-    private final Set<String> terms;
+    private final Set<String> keywords;
 
     @JsonCreator
     public EmailDto(@JsonProperty(PROPERTY_EMAIL) String email,
-                    @JsonProperty(PROPERTY_TERMS) Set<String> terms) {
+                    @JsonProperty(PROPERTY_KEYWORDS) Set<String> keywords) {
         this.email = email;
-        this.terms = terms;
+        this.keywords = keywords;
     }
 
     @JsonProperty(PROPERTY_EMAIL)
@@ -26,16 +26,16 @@ public class EmailDto {
         return email;
     }
 
-    @JsonProperty(PROPERTY_TERMS)
-    public Set<String> getTerms() {
-        return terms;
+    @JsonProperty(PROPERTY_KEYWORDS)
+    public Set<String> getKeywords() {
+        return keywords;
     }
 
     @Override
     public String toString() {
         return "EmailDto{" +
                 "email='" + email + '\'' +
-                ", terms=" + terms +
+                ", keywords=" + keywords +
                 '}';
     }
 
@@ -48,12 +48,12 @@ public class EmailDto {
             return false;
         }
         EmailDto emailDto = (EmailDto) o;
-        return email.equals(emailDto.email) && Objects.equals(terms, emailDto.terms);
+        return email.equals(emailDto.email) && Objects.equals(keywords, emailDto.keywords);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(email, terms);
+        return Objects.hash(email, keywords);
     }
 
 }

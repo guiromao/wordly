@@ -19,7 +19,7 @@ public class EmailConverter {
     }
 
     public static EmailEntity toEntity(EmailDto dto) {
-        return new EmailEntity(dto.getEmail(), dto.getTerms());
+        return new EmailEntity(dto.getEmail(), dto.getKeywords());
     }
 
 }

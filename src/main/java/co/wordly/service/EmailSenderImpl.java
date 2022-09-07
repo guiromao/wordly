@@ -33,7 +33,7 @@ public class EmailSenderImpl implements EmailSender {
     @Override
     public void send(String toEmail, Set<JobEntity> jobs) {
         if (!CollectionUtils.isEmpty(jobs)) {
-            LOG.info("Going to send en email with {} jobs to: {}", jobs.size(), toEmail);
+            LOG.info("Going to send an email with {} jobs to: {}", jobs.size(), toEmail);
 
             String title = "Today's Jobs!!! <"  + LocalDate.now() + ">";
             String message = PlatformJobConverter.convertToEmailList(jobs);

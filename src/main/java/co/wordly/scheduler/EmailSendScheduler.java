@@ -27,7 +27,7 @@ public class EmailSendScheduler {
 
     private static final Logger LOG = LoggerFactory.getLogger(EmailSendScheduler.class);
 
-    private EmailSender emailSender;
+    private final EmailSender emailSender;
     private final EmailRepository emailRepository;
     private final JobRepository jobRepository;
 
