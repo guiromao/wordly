@@ -19,7 +19,7 @@ public class LandingJobsJobsFetcher extends JobsFetcher {
 
     public LandingJobsJobsFetcher(RestTemplate restTemplate,
                                   @Value("${source.api.url.landingjobs}") String apiUrl) {
-        super(restTemplate, apiUrl, LandingJobsResponseDto.class, MAX_RESULTS);
+        super(restTemplate, apiUrl, "Landing Jobs", LandingJobsResponseDto.class, MAX_RESULTS);
     }
 
     @Override

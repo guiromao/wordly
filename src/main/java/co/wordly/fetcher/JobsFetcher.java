@@ -20,14 +20,18 @@ public abstract class JobsFetcher {
 
     protected final RestTemplate restTemplate;
     protected final String apiUrl;
+    protected final String apiName;
     protected final Class<? extends ApiResponse> apiResponse;
     protected final Integer maxResults;
 
     @Autowired
     protected JobsFetcher(RestTemplate restTemplate, String apiUrl,
-                          Class<? extends ApiResponse> apiResponse, Integer maxResults) {
+                          String apiName,
+                          Class<? extends ApiResponse> apiResponse,
+                          Integer maxResults) {
         this.restTemplate = restTemplate;
         this.apiUrl = apiUrl;
+        this.apiName = apiName;
         this.apiResponse = apiResponse;
         this.maxResults = maxResults;
     }
@@ -51,7 +55,7 @@ public abstract class JobsFetcher {
             }
         }
 
-        LOG.info("Found {} jobs in API: {}", jobs.size(), apiUrl);
+        LOG.info("Found {} jobs in API of {}", jobs.size(), apiName);
 
         return jobs;
     }

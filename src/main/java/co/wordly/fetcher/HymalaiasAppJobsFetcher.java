@@ -24,7 +24,7 @@ public class HymalaiasAppJobsFetcher extends JobsFetcher {
 
     public HymalaiasAppJobsFetcher(RestTemplate restTemplate,
                                    @Value("${source.api.url.hymalaiasapp}") String apiUrl) {
-        super(restTemplate, apiUrl, HymalaiasAppResponse.class, MAX_RESULTS);
+        super(restTemplate, apiUrl, "Hymalaias App", HymalaiasAppResponse.class, MAX_RESULTS);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class HymalaiasAppJobsFetcher extends JobsFetcher {
             }
         }
 
-        LOG.info("Found {} jobs in API: {}", jobs.size(), apiUrl);
+        LOG.info("Found {} jobs in API of {}", jobs.size(), apiName);
 
         return jobs;
     }
