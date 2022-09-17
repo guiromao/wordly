@@ -24,16 +24,17 @@ public class HymalaiasAppJobsFetcher extends JobsFetcher {
 
     public HymalaiasAppJobsFetcher(RestTemplate restTemplate,
                                    @Value("${source.api.url.hymalaiasapp}") String apiUrl) {
-        super(restTemplate, apiUrl, HymalaiasAppResponse.class);
+        super(restTemplate, apiUrl, HymalaiasAppResponse.class, MAX_RESULTS);
     }
 
     @Override
     public Set<JobDto> fetchJobs() {
         LOG.info("Searching for jobs in: Hymalaias App");
+
         int offset = 0;
-        String url = apiUrl;
-        ResponseEntity<? extends ApiResponse> responseDto;
         Set<JobDto> jobs = new HashSet<>();
+        ResponseEntity<? extends ApiResponse> responseDto;
+        String url = apiUrl;
         boolean hasAllJobs = false;
 
         while (!hasAllJobs) {
@@ -41,8 +42,8 @@ public class HymalaiasAppJobsFetcher extends JobsFetcher {
 
             if (Objects.nonNull(responseDto.getBody()) && !CollectionUtils.isEmpty(responseDto.getBody().getJobs())) {
                 jobs.addAll(responseDto.getBody().getJobs());
-                offset += MAX_RESULTS;
-                url = apiUrl + "?offset=" + offset + "&limit=" + MAX_RESULTS;
+                offset += maxResults;
+                url = apiUrl + "?offset=" + offset + "&limit=" + maxResults;
             } else {
                 hasAllJobs = true;
             }

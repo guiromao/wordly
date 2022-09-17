@@ -14,10 +14,11 @@ import java.util.Set;
 public class RemotiveJobsFetcher extends JobsFetcher {
 
     private static final Logger LOG = LoggerFactory.getLogger(RemotiveJobsFetcher.class);
+    private static final Integer MAX_RESULTS = 1000;
 
     public RemotiveJobsFetcher(RestTemplate restTemplate,
                                @Value("${source.api.url.remotive}") String apiUrl) {
-        super(restTemplate, apiUrl, RemotiveJobsDto.class);
+        super(restTemplate, apiUrl, RemotiveJobsDto.class, MAX_RESULTS);
     }
 
     @Override

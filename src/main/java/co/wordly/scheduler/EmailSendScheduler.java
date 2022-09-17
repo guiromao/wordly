@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /*
@@ -40,7 +39,9 @@ public class EmailSendScheduler {
         this.jobRepository = jobRepository;
     }
 
-    @Scheduled(fixedDelay = 1000 * 60 * 60 * 24)
+    // Sending newsletter once per day | once per day once the app runs, OR, once per day at 19h00 UTC
+    //@Scheduled(fixedRate = 1000 * 60 * 60 * 24)
+    @Scheduled(cron = "0 0 19 * * ?", zone = "Europe/Lisbon")
     public void sendEmails() {
         ExecutorService executor = Executors.newCachedThreadPool();
         executor.execute(this::emailSendingTask);

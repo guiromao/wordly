@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -21,26 +21,39 @@ public abstract class JobsFetcher {
     protected final RestTemplate restTemplate;
     protected final String apiUrl;
     protected final Class<? extends ApiResponse> apiResponse;
+    protected final Integer maxResults;
 
     @Autowired
     protected JobsFetcher(RestTemplate restTemplate, String apiUrl,
-                          Class<? extends ApiResponse> apiResponse) {
+                          Class<? extends ApiResponse> apiResponse, Integer maxResults) {
         this.restTemplate = restTemplate;
         this.apiUrl = apiUrl;
         this.apiResponse = apiResponse;
+        this.maxResults = maxResults;
     }
 
     public Set<JobDto> fetchJobs() {
-        ResponseEntity<? extends ApiResponse> jobsResponse =
-                restTemplate.exchange(apiUrl, HttpMethod.GET, null, apiResponse);
+        int offset = 0;
+        Set<JobDto> jobs = new HashSet<>();
+        ResponseEntity<? extends ApiResponse> responseDto;
+        String url = apiUrl;
+        boolean hasAllJobs = false;
 
-        if (Objects.isNull(jobsResponse.getBody()) || CollectionUtils.isEmpty(jobsResponse.getBody().getJobs())) {
-            return Collections.emptySet();
+        while (!hasAllJobs) {
+            responseDto = restTemplate.exchange(url, HttpMethod.GET, null, apiResponse);
+
+            if (Objects.nonNull(responseDto.getBody()) && !CollectionUtils.isEmpty(responseDto.getBody().getJobs())) {
+                jobs.addAll(responseDto.getBody().getJobs());
+                offset += maxResults;
+                url = apiUrl + "&offset=" + offset + "&limit=" + maxResults;
+            } else {
+                hasAllJobs = true;
+            }
         }
 
-        LOG.info("Found {} jobs in API: {}", jobsResponse.getBody().getJobs().size(), apiUrl);
+        LOG.info("Found {} jobs in API: {}", jobs.size(), apiUrl);
 
-        return jobsResponse.getBody().getJobs();
+        return jobs;
     }
 
 }

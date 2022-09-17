@@ -48,7 +48,8 @@ public class JobSearchScheduler {
         this.sourceComponents = sourceComponents;
     }
 
-    @Scheduled(fixedDelay = 1000 * 60 * 60)
+    // Fetching jobs once per hour
+    @Scheduled(fixedRate = 1000 * 60 * 60)
     public void fetchJobs() {
         LOG.info("Fetching list of companies...");
         companyManager.startupCompanies();
