@@ -83,7 +83,7 @@ public class JobSearchScheduler {
         final SourceComponent sourceComponent = sourceComponentEntry.getValue();
         final String apiName = sourceComponentEntry.getKey();
 
-        Set<JobDto> jobDtos = sourceComponent.fetchJobs();
+        Set<JobDto> jobDtos = sourceComponent.findJobs();
 
         if (CollectionUtils.isEmpty(jobDtos)) {
             return Collections.emptySet();

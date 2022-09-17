@@ -1,4 +1,4 @@
-package co.wordly.fetcher;
+package co.wordly.finder;
 
 import co.wordly.data.dto.JobDto;
 import co.wordly.data.dto.apiresponse.ApiResponse;
@@ -14,9 +14,9 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public abstract class JobsFetcher {
+public abstract class JobsFinder {
 
-    private static final Logger LOG = LoggerFactory.getLogger(JobsFetcher.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JobsFinder.class);
 
     protected final RestTemplate restTemplate;
     protected final String apiUrl;
@@ -25,10 +25,10 @@ public abstract class JobsFetcher {
     protected final Integer maxResults;
 
     @Autowired
-    protected JobsFetcher(RestTemplate restTemplate, String apiUrl,
-                          String apiName,
-                          Class<? extends ApiResponse> apiResponse,
-                          Integer maxResults) {
+    protected JobsFinder(RestTemplate restTemplate, String apiUrl,
+                         String apiName,
+                         Class<? extends ApiResponse> apiResponse,
+                         Integer maxResults) {
         this.restTemplate = restTemplate;
         this.apiUrl = apiUrl;
         this.apiName = apiName;
@@ -36,7 +36,7 @@ public abstract class JobsFetcher {
         this.maxResults = maxResults;
     }
 
-    public Set<JobDto> fetchJobs() {
+    public Set<JobDto> findJobs() {
         int offset = 0;
         Set<JobDto> jobs = new HashSet<>();
         ResponseEntity<? extends ApiResponse> responseDto;

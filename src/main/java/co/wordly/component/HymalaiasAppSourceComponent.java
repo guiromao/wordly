@@ -6,7 +6,7 @@ import co.wordly.data.dto.JobDto;
 import co.wordly.data.dto.apiresponse.ApiResponse;
 import co.wordly.data.dto.apiresponse.HymalaiasAppResponse;
 import co.wordly.data.dto.apiresponse.company.ApiCompanyResponse;
-import co.wordly.fetcher.HymalaiasAppJobsFetcher;
+import co.wordly.finder.HymalaiasAppJobsFinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,11 +15,11 @@ import java.util.Set;
 @Component
 public class HymalaiasAppSourceComponent implements SourceComponent {
 
-    private final HymalaiasAppJobsFetcher hymalaiasAppJobsFetcher;
+    private final HymalaiasAppJobsFinder hymalaiasAppJobsFetcher;
     private final HymalaiasJobConverter hymalaiasJobConverter;
 
     @Autowired
-    public HymalaiasAppSourceComponent(HymalaiasAppJobsFetcher hymalaiasAppJobsFetcher,
+    public HymalaiasAppSourceComponent(HymalaiasAppJobsFinder hymalaiasAppJobsFetcher,
                                        HymalaiasJobConverter hymalaiasJobConverter) {
         this.hymalaiasAppJobsFetcher = hymalaiasAppJobsFetcher;
         this.hymalaiasJobConverter = hymalaiasJobConverter;
@@ -46,8 +46,8 @@ public class HymalaiasAppSourceComponent implements SourceComponent {
     }
 
     @Override
-    public Set<JobDto> fetchJobs() {
-        return hymalaiasAppJobsFetcher.fetchJobs();
+    public Set<JobDto> findJobs() {
+        return hymalaiasAppJobsFetcher.findJobs();
     }
 
 }

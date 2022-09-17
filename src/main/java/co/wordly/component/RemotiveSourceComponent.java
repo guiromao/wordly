@@ -6,7 +6,7 @@ import co.wordly.data.dto.JobDto;
 import co.wordly.data.dto.apiresponse.ApiResponse;
 import co.wordly.data.dto.apiresponse.RemotiveJobsDto;
 import co.wordly.data.dto.apiresponse.company.ApiCompanyResponse;
-import co.wordly.fetcher.RemotiveJobsFetcher;
+import co.wordly.finder.RemotiveJobsFinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,11 +15,11 @@ import java.util.Set;
 @Component
 public class RemotiveSourceComponent implements SourceComponent {
 
-    private final RemotiveJobsFetcher remotiveJobsFetcher;
+    private final RemotiveJobsFinder remotiveJobsFetcher;
     private final RemotiveJobConverter remotiveJobConverter;
 
     @Autowired
-    public RemotiveSourceComponent(RemotiveJobsFetcher remotiveJobsFetcher,
+    public RemotiveSourceComponent(RemotiveJobsFinder remotiveJobsFetcher,
                                    RemotiveJobConverter remotiveJobConverter) {
         this.remotiveJobsFetcher = remotiveJobsFetcher;
         this.remotiveJobConverter = remotiveJobConverter;
@@ -46,8 +46,8 @@ public class RemotiveSourceComponent implements SourceComponent {
     }
 
     @Override
-    public Set<JobDto> fetchJobs() {
-        return remotiveJobsFetcher.fetchJobs();
+    public Set<JobDto> findJobs() {
+        return remotiveJobsFetcher.findJobs();
     }
 
 }

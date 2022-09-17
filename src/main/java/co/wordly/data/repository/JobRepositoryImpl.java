@@ -62,8 +62,8 @@ public class JobRepositoryImpl implements JobRepositoryCustom {
         }
 
         if (!CollectionUtils.isEmpty(keywords)) {
-            String[] terms = new String[keywords.size()];
-            TextCriteria textCriteria = TextCriteria.forDefaultLanguage().matchingAny(keywords.toArray(terms));
+            String[] keywordsArr = new String[keywords.size()];
+            TextCriteria textCriteria = TextCriteria.forDefaultLanguage().matchingAny(keywords.toArray(keywordsArr));
             query.addCriteria(textCriteria);
         }
 

@@ -7,7 +7,7 @@ import co.wordly.data.dto.apiresponse.ApiResponse;
 import co.wordly.data.dto.apiresponse.LandingJobsResponseDto;
 import co.wordly.data.dto.apiresponse.company.ApiCompanyResponse;
 import co.wordly.data.dto.apiresponse.company.ApiCompanyResponseLandingJobs;
-import co.wordly.fetcher.LandingJobsJobsFetcher;
+import co.wordly.finder.LandingJobsJobsFinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -17,12 +17,12 @@ import java.util.Set;
 @Component
 public class LandingJobsSourceComponent implements SourceComponent {
 
-    private final LandingJobsJobsFetcher landingJobsJobsFetcher;
+    private final LandingJobsJobsFinder landingJobsJobsFetcher;
     private final LandingJobsJobConverter landingJobsJobConverter;
     private final String companyApiUrl;
 
     @Autowired
-    public LandingJobsSourceComponent(LandingJobsJobsFetcher landingJobsJobsFetcher,
+    public LandingJobsSourceComponent(LandingJobsJobsFinder landingJobsJobsFetcher,
                                       LandingJobsJobConverter landingJobsJobConverter,
                                       @Value("${source.api.url.companies.landingjobs}") String companyApiUrl) {
         this.landingJobsJobsFetcher = landingJobsJobsFetcher;
@@ -51,8 +51,8 @@ public class LandingJobsSourceComponent implements SourceComponent {
     }
 
     @Override
-    public Set<JobDto> fetchJobs() {
-        return landingJobsJobsFetcher.fetchJobs();
+    public Set<JobDto> findJobs() {
+        return landingJobsJobsFetcher.findJobs();
     }
 
 }

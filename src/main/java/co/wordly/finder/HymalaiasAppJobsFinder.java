@@ -1,4 +1,4 @@
-package co.wordly.fetcher;
+package co.wordly.finder;
 
 import co.wordly.data.dto.JobDto;
 import co.wordly.data.dto.apiresponse.ApiResponse;
@@ -17,18 +17,18 @@ import java.util.Objects;
 import java.util.Set;
 
 @Component
-public class HymalaiasAppJobsFetcher extends JobsFetcher {
+public class HymalaiasAppJobsFinder extends JobsFinder {
 
-    private static final Logger LOG = LoggerFactory.getLogger(HymalaiasAppJobsFetcher.class);
+    private static final Logger LOG = LoggerFactory.getLogger(HymalaiasAppJobsFinder.class);
     private static final Integer MAX_RESULTS = 200;
 
-    public HymalaiasAppJobsFetcher(RestTemplate restTemplate,
-                                   @Value("${source.api.url.hymalaiasapp}") String apiUrl) {
+    public HymalaiasAppJobsFinder(RestTemplate restTemplate,
+                                  @Value("${source.api.url.hymalaiasapp}") String apiUrl) {
         super(restTemplate, apiUrl, "Hymalaias App", HymalaiasAppResponse.class, MAX_RESULTS);
     }
 
     @Override
-    public Set<JobDto> fetchJobs() {
+    public Set<JobDto> findJobs() {
         LOG.info("Searching for jobs in: Hymalaias App");
 
         int offset = 0;

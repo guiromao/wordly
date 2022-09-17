@@ -20,6 +20,6 @@ public interface SourceComponent {
 
     Class<? extends ApiCompanyResponse> getCompaniesResponse();
 
-    Set<JobDto> fetchJobs();
+    Set<JobDto> findJobs();
 
 }
