@@ -2,7 +2,7 @@ package co.wordly.scheduler;
 
 import co.wordly.component.SourceComponent;
 import co.wordly.data.converter.JobConverter;
-import co.wordly.data.dto.apiresponse.ApiResponse;
+import co.wordly.data.dto.JobDto;
 import co.wordly.data.entity.JobEntity;
 import co.wordly.service.CompanyManager;
 import co.wordly.service.CompanyService;
@@ -11,12 +11,9 @@ import co.wordly.service.SourceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -32,7 +29,6 @@ public class JobSearchScheduler {
 
     private static final Logger LOG = LoggerFactory.getLogger(JobSearchScheduler.class);
 
-    private final RestTemplate restTemplate;
     private final SourceService sourceService;
     private final JobService jobService;
     private final CompanyService companyService;
@@ -40,13 +36,11 @@ public class JobSearchScheduler {
     private final Map<String, SourceComponent> sourceComponents;
 
     @Autowired
-    public JobSearchScheduler(RestTemplate restTemplate,
-                              SourceService sourceService,
+    public JobSearchScheduler(SourceService sourceService,
                               JobService jobService,
                               CompanyService companyService,
                               CompanyManager companyManager,
                               Map<String, SourceComponent> sourceComponents) {
-        this.restTemplate = restTemplate;
         this.sourceService = sourceService;
         this.jobService = jobService;
         this.companyService = companyService;
@@ -86,28 +80,21 @@ public class JobSearchScheduler {
 
     private Set<JobEntity> getJobs(Map.Entry<String, SourceComponent> sourceComponentEntry) {
         final SourceComponent sourceComponent = sourceComponentEntry.getValue();
-        final String apiUrl = sourceComponent.getApiUrl();
-        final Class<? extends ApiResponse> apiResponseClass = sourceComponent.getReturnedObjects();
         final String apiName = sourceComponentEntry.getKey();
 
-        LOG.info("Searching for jobs in: {}", apiName);
+        Set<JobDto> jobDtos = sourceComponent.fetchJobs();
 
-        ResponseEntity<? extends ApiResponse> jobsResponse =
-                restTemplate.exchange(apiUrl, HttpMethod.GET, null, apiResponseClass);
-
-        if (Objects.isNull(jobsResponse.getBody()) || CollectionUtils.isEmpty(jobsResponse.getBody().getJobs())) {
+        if (CollectionUtils.isEmpty(jobDtos)) {
             return Collections.emptySet();
         }
 
-        LOG.info("Found {} jobs in {}", jobsResponse.getBody().getJobs().size(), apiName);
-
         LOG.info("Handling companies found in fetched jobs...");
-        companyService.handleCompaniesOf(jobsResponse.getBody().getJobs(), sourceService.getIdFromName(apiName));
+        companyService.handleCompaniesOf(jobDtos, sourceService.getIdFromName(apiName));
         LOG.info("Handling found companies: done.");
 
         JobConverter converter = sourceComponent.getConverter();
 
-        return converter.convert(jobsResponse.getBody());
+        return converter.convert(jobDtos);
     }
 
 }

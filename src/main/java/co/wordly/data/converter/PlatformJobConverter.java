@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 
 public class PlatformJobConverter {
 
+    private static final String NEW_LINE = System.getProperty("line.separator");
+
     private PlatformJobConverter() {
         // no instantiation
     }
@@ -39,16 +41,19 @@ public class PlatformJobConverter {
     }
 
     public static String convertToEmail(JobEntity job) {
-        StringBuilder stringBuilder = new StringBuilder().append("Title: ").append(job.getTitle()).append("\n")
-                .append("Description: ").append(job.getDescription()).append("\n")
-                .append("URL: ").append(job.getUrl()).append("\n");
+        StringBuilder stringBuilder = new StringBuilder().append("Title: ").append(job.getTitle()).append(NEW_LINE)
+                .append("Description: ").append(job.getDescription()).append(NEW_LINE)
+                .append("URL: ").append(job.getUrl()).append(NEW_LINE);
 
         if (StringUtils.hasText(job.getSalary())) {
-            stringBuilder.append("Salary: ").append(job.getSalary()).append("\n");
+            stringBuilder.append("Salary: ").append(job.getSalary()).append(NEW_LINE);
         }
 
         return stringBuilder.append("Publish Date: \n").append(job.getPublishDate())
-                .append("\n\n###########################\n\n\n").toString();
+                .append(NEW_LINE).append(NEW_LINE)
+                .append("###########################")
+                .append(NEW_LINE).append(NEW_LINE).append(NEW_LINE)
+                .toString();
     }
 
 }

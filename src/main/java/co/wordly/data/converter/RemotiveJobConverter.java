@@ -29,11 +29,10 @@ public class RemotiveJobConverter extends JobConverter {
     }
 
     @Override
-    public Set<JobEntity> convert(ApiResponse apiResponse) {
+    public Set<JobEntity> convert(Set<JobDto> jobDtos) {
         final String sourceId = sourceRepository.findByName(JobsConfigurations.REMOTIVE)
                 .map(SourceEntity::getId)
                 .orElse(null);
-        Set<JobDto> jobDtos = apiResponse.getJobs();
         Set<String> companyNames = jobDtos.stream()
                 .map(JobDto::getCompanyName)
                 .collect(Collectors.toSet());

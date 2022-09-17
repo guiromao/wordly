@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class LandingJobsResponseDto implements ApiResponse {
 
-
     private final Set<LandingJobsDto> jobs;
 
     @JsonCreator

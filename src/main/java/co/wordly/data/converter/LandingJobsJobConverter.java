@@ -2,7 +2,6 @@ package co.wordly.data.converter;
 
 import co.wordly.configuration.JobsConfigurations;
 import co.wordly.data.dto.JobDto;
-import co.wordly.data.dto.apiresponse.ApiResponse;
 import co.wordly.data.entity.CompanyEntity;
 import co.wordly.data.entity.JobEntity;
 import co.wordly.data.entity.SourceEntity;
@@ -27,12 +26,12 @@ public class LandingJobsJobConverter extends JobConverter {
     }
 
     @Override
-    public Set<JobEntity> convert(ApiResponse apiResponse) {
+    public Set<JobEntity> convert(Set<JobDto> jobDtos) {
         final String landingJobsId = sourceRepository.findByName(JobsConfigurations.LANDING_JOBS)
                 .map(SourceEntity::getId)
                 .orElse("");
 
-        Set<String> companyIds = apiResponse.getJobs().stream()
+        Set<String> companyIds = jobDtos.stream()
                 .map(JobDto::getCompanyId)
                 .collect(Collectors.toSet());
 
@@ -42,7 +41,7 @@ public class LandingJobsJobConverter extends JobConverter {
                 .collect(Collectors.toMap(company -> company.getSourceRelations().get(landingJobsId),
                         CompanyEntity::getId));
 
-        return apiResponse.getJobs().stream()
+        return jobDtos.stream()
                 .map(dto -> toEntity(dto, landingJobsId, companyPlatformIds))
                 .collect(Collectors.toSet());
     }

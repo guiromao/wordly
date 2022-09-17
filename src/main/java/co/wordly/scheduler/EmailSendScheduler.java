@@ -62,11 +62,11 @@ public class EmailSendScheduler {
 
     private Set<JobEntity> filterJobsForUser(List<JobEntity> jobs, EmailEntity account) {
         return jobs.stream()
-                .filter(job -> doesJobContainTerms(job, account.getKeywords()))
+                .filter(job -> doesJobContainKeywords(job, account.getKeywords()))
                 .collect(Collectors.toSet());
     }
 
-    private boolean doesJobContainTerms(JobEntity job, Set<String> keywords) {
+    private boolean doesJobContainKeywords(JobEntity job, Set<String> keywords) {
         String text = String.join(" ", job.getTitle().toLowerCase(),
                 job.getDescription().toLowerCase());
 

@@ -25,8 +25,7 @@ public class HymalaiasJobConverter extends JobConverter {
     }
 
     @Override
-    public Set<JobEntity> convert(ApiResponse apiResponse) {
-        final Set<JobDto> jobDtos = apiResponse.getJobs();
+    public Set<JobEntity> convert(Set<JobDto> jobDtos) {
         final String sourceId = sourceRepository.findByName(JobsConfigurations.HYMALAIAS_APP)
                 .map(SourceEntity::getId)
                 .orElse(JobsConfigurations.HYMALAIAS_APP);

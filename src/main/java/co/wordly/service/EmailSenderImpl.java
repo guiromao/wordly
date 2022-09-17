@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -27,7 +26,7 @@ public class EmailSenderImpl implements EmailSender {
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("E, MMM dd yyyy");
 
     private final JavaMailSender mailSender;
-    private String wordlyAccount;
+    private final String wordlyAccount;
 
     public EmailSenderImpl(JavaMailSender mailSender,
                            @Value("${spring.mail.username}") String wordlyAccount) {

@@ -2,29 +2,27 @@ package co.wordly.component;
 
 import co.wordly.data.converter.JobConverter;
 import co.wordly.data.converter.RemotiveJobConverter;
+import co.wordly.data.dto.JobDto;
 import co.wordly.data.dto.apiresponse.ApiResponse;
 import co.wordly.data.dto.apiresponse.RemotiveJobsDto;
 import co.wordly.data.dto.apiresponse.company.ApiCompanyResponse;
+import co.wordly.fetcher.RemotiveJobsFetcher;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import java.util.Set;
 
 @Component
 public class RemotiveSourceComponent implements SourceComponent {
 
+    private final RemotiveJobsFetcher remotiveJobsFetcher;
     private final RemotiveJobConverter remotiveJobConverter;
-    private final String apiUrl;
 
     @Autowired
-    public RemotiveSourceComponent(RemotiveJobConverter remotiveJobConverter,
-                                   @Value("${source.api.url.remotive}") String apiUrl) {
+    public RemotiveSourceComponent(RemotiveJobsFetcher remotiveJobsFetcher,
+                                   RemotiveJobConverter remotiveJobConverter) {
+        this.remotiveJobsFetcher = remotiveJobsFetcher;
         this.remotiveJobConverter = remotiveJobConverter;
-        this.apiUrl = apiUrl;
-    }
-
-    @Override
-    public String getApiUrl() {
-        return apiUrl;
     }
 
     @Override
@@ -45,6 +43,11 @@ public class RemotiveSourceComponent implements SourceComponent {
     @Override
     public Class<? extends ApiCompanyResponse> getCompaniesResponse() {
         return null;
+    }
+
+    @Override
+    public Set<JobDto> fetchJobs() {
+        return remotiveJobsFetcher.fetchJobs();
     }
 
 }
