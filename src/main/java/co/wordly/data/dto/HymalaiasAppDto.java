@@ -1,6 +1,5 @@
 package co.wordly.data.dto;
 
-import co.wordly.data.dto.enums.HymalaiasCategory;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -66,6 +65,7 @@ public class HymalaiasAppDto implements ApiDto {
                 .publishDate(String.valueOf(pubDate))
                 .url(url)
                 .sourceJobId(guid)
+                .categories(categories)
                 .build();
     }
 

@@ -1,6 +1,7 @@
 package co.wordly.data.dto;
 
 import java.util.Objects;
+import java.util.Set;
 
 public class JobDto {
 
@@ -14,11 +15,13 @@ public class JobDto {
     private final String companyLogoUrl;
     private final String sourceId;
     private final String sourceJobId;
+    private final Set<String> categories;
     private final String publishDate;
 
     private JobDto(String title, String description, String salary,
                    String companyId, String companyName, String url, String companyUrl, String companyLogoUrl,
-                   String sourceId, String sourceJobId, String publishDate) {
+                   String sourceId, String sourceJobId,
+                   Set<String> categories, String publishDate) {
         this.title = title;
         this.description = description;
         this.salary = salary;
@@ -29,6 +32,7 @@ public class JobDto {
         this.companyLogoUrl = companyLogoUrl;
         this.sourceId = sourceId;
         this.sourceJobId = sourceJobId;
+        this.categories = categories;
         this.publishDate = publishDate;
     }
 
@@ -45,6 +49,7 @@ public class JobDto {
                 ", companyLogoUrl='" + companyLogoUrl + '\'' +
                 ", sourceId='" + sourceId + '\'' +
                 ", sourceJobId='" + sourceJobId + '\'' +
+                ", categories=" + categories +
                 ", publishDate='" + publishDate + '\'' +
                 '}';
     }
@@ -89,6 +94,10 @@ public class JobDto {
         return sourceJobId;
     }
 
+    public Set<String> getCategories() {
+        return categories;
+    }
+
     public String getPublishDate() {
         return publishDate;
     }
@@ -107,12 +116,14 @@ public class JobDto {
                 Objects.equals(companyName, jobDto.companyName) && Objects.equals(url, jobDto.url) &&
                 Objects.equals(companyUrl, jobDto.companyUrl) && Objects.equals(companyLogoUrl, jobDto.companyLogoUrl) &&
                 Objects.equals(sourceId, jobDto.sourceId) && Objects.equals(sourceJobId, jobDto.sourceJobId) &&
+                Objects.equals(categories, jobDto.categories) &&
                 Objects.equals(publishDate, jobDto.publishDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, description, salary, companyName, url, companyUrl, companyLogoUrl, sourceId, sourceJobId, publishDate);
+        return Objects.hash(title, description, salary, companyName, url, companyUrl, companyLogoUrl,
+                sourceId, sourceJobId, categories, publishDate);
     }
 
     public static class Builder {
@@ -127,6 +138,7 @@ public class JobDto {
         private String companyLogoUrl;
         private String sourceId;
         private String sourceJobId;
+        private Set<String> categories;
         private String publishDate;
 
         public Builder title(String title) {
@@ -184,11 +196,16 @@ public class JobDto {
             return this;
         }
 
+        public Builder categories(Set<String> categories) {
+            this.categories = categories;
+            return this;
+        }
+
         public JobDto build() {
             return new JobDto(
                     title, description, salary, companyId, companyName, url,
                     companyUrl, companyLogoUrl, sourceId,
-                    sourceJobId, publishDate
+                    sourceJobId, categories, publishDate
             );
         }
 

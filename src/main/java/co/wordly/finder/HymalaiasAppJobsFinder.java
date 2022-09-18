@@ -1,5 +1,6 @@
 package co.wordly.finder;
 
+import co.wordly.configuration.HymalaiasAppConfig;
 import co.wordly.data.dto.JobDto;
 import co.wordly.data.dto.apiresponse.ApiResponse;
 import co.wordly.data.dto.apiresponse.HymalaiasAppResponse;
@@ -15,12 +16,14 @@ import org.springframework.web.client.RestTemplate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class HymalaiasAppJobsFinder extends JobsFinder {
 
     private static final Logger LOG = LoggerFactory.getLogger(HymalaiasAppJobsFinder.class);
     private static final Integer MAX_RESULTS = 200;
+    private static final Set<String> SUPPORTED_CATEGORIES = HymalaiasAppConfig.SUPPORTED_CATEGORIES;
 
     public HymalaiasAppJobsFinder(RestTemplate restTemplate,
                                   @Value("${source.api.url.hymalaiasapp}") String apiUrl) {
@@ -48,6 +51,12 @@ public class HymalaiasAppJobsFinder extends JobsFinder {
                 hasAllJobs = true;
             }
         }
+
+        // Filter the jobs directly related to Software Development
+        jobs = jobs.stream()
+                .filter(job -> job.getCategories().stream()
+                        .anyMatch(SUPPORTED_CATEGORIES::contains))
+                .collect(Collectors.toSet());
 
         LOG.info("Found {} jobs in API of {}", jobs.size(), apiName);
 

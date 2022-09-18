@@ -3,8 +3,6 @@ package co.wordly.component;
 import co.wordly.data.converter.HymalaiasJobConverter;
 import co.wordly.data.converter.JobConverter;
 import co.wordly.data.dto.JobDto;
-import co.wordly.data.dto.apiresponse.ApiResponse;
-import co.wordly.data.dto.apiresponse.HymalaiasAppResponse;
 import co.wordly.data.dto.apiresponse.company.ApiCompanyResponse;
 import co.wordly.finder.HymalaiasAppJobsFinder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +31,6 @@ public class HymalaiasAppSourceComponent implements SourceComponent {
     @Override
     public String getCompanyApiUrl() {
         return null;
-    }
-
-    @Override
-    public Class<? extends ApiResponse> getReturnedObjects() {
-        return HymalaiasAppResponse.class;
     }
 
     @Override

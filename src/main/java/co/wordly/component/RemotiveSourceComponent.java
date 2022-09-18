@@ -36,11 +36,6 @@ public class RemotiveSourceComponent implements SourceComponent {
     }
 
     @Override
-    public Class<? extends ApiResponse> getReturnedObjects() {
-        return RemotiveJobsDto.class;
-    }
-
-    @Override
     public Class<? extends ApiCompanyResponse> getCompaniesResponse() {
         return null;
     }

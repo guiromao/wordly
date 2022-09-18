@@ -14,13 +14,13 @@ import java.time.LocalDateTime;
         getterVisibility = JsonAutoDetect.Visibility.NONE,
         isGetterVisibility = JsonAutoDetect.Visibility.NONE)
 public record PlatformJobDto (@JsonProperty(PROPERTY_ID) String id,
-                             @JsonProperty(PROPERTY_TITLE) String title,
-                             @JsonProperty(PROPERTY_DESCRIPTION) String description,
-                             @JsonProperty(PROPERTY_COMPANY_NAME) String companyName,
-                             @JsonProperty(PROPERTY_COMPANY_LOGO_URL) String companyLogoUrl,
-                             @JsonProperty(PROPERTY_SALARY) String salary,
-                             @JsonProperty(PROPERTY_URL) String url,
-                             @JsonProperty(PROPERTY_PUBLISH_DATE) LocalDateTime publishDate) implements Serializable {
+                              @JsonProperty(PROPERTY_TITLE) String title,
+                              @JsonProperty(PROPERTY_DESCRIPTION) String description,
+                              @JsonProperty(PROPERTY_COMPANY_NAME) String companyName,
+                              @JsonProperty(PROPERTY_COMPANY_LOGO_URL) String companyLogoUrl,
+                              @JsonProperty(PROPERTY_SALARY) String salary,
+                              @JsonProperty(PROPERTY_URL) String url,
+                              @JsonProperty(PROPERTY_PUBLISH_DATE) LocalDateTime publishDate) implements Serializable {
 
     private static final Long serialId = 2L;
 

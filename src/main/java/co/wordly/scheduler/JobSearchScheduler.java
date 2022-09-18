@@ -1,6 +1,7 @@
 package co.wordly.scheduler;
 
 import co.wordly.component.SourceComponent;
+import co.wordly.configuration.JobsConfigurations;
 import co.wordly.data.converter.JobConverter;
 import co.wordly.data.dto.JobDto;
 import co.wordly.data.entity.JobEntity;
@@ -11,6 +12,7 @@ import co.wordly.service.SourceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -40,7 +42,7 @@ public class JobSearchScheduler {
                               JobService jobService,
                               CompanyService companyService,
                               CompanyManager companyManager,
-                              Map<String, SourceComponent> sourceComponents) {
+                              @Qualifier(JobsConfigurations.SOURCE_COMPONENTS) Map<String, SourceComponent> sourceComponents) {
         this.sourceService = sourceService;
         this.jobService = jobService;
         this.companyService = companyService;

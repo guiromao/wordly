@@ -41,11 +41,6 @@ public class LandingJobsSourceComponent implements SourceComponent {
     }
 
     @Override
-    public Class<? extends ApiResponse> getReturnedObjects() {
-        return LandingJobsResponseDto.class;
-    }
-
-    @Override
     public Class<? extends ApiCompanyResponse> getCompaniesResponse() {
         return ApiCompanyResponseLandingJobs.class;
     }

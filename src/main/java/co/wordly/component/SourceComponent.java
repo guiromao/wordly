@@ -16,8 +16,6 @@ public interface SourceComponent {
 
     String getCompanyApiUrl();
 
-    Class<? extends ApiResponse> getReturnedObjects();
-
     Class<? extends ApiCompanyResponse> getCompaniesResponse();
 
     Set<JobDto> findJobs();
