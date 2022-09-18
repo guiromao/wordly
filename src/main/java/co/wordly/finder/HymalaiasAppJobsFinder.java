@@ -45,8 +45,8 @@ public class HymalaiasAppJobsFinder extends JobsFinder {
 
             if (Objects.nonNull(responseDto.getBody()) && !CollectionUtils.isEmpty(responseDto.getBody().getJobs())) {
                 jobs.addAll(responseDto.getBody().getJobs());
-                offset += maxResults;
-                url = apiUrl + "?offset=" + offset + "&limit=" + maxResults;
+                offset += MAX_RESULTS;
+                url = apiUrl + "?offset=" + offset + "&limit=" + MAX_RESULTS;
             } else {
                 hasAllJobs = true;
             }

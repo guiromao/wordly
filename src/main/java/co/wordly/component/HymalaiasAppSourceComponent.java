@@ -13,13 +13,13 @@ import java.util.Set;
 @Component
 public class HymalaiasAppSourceComponent implements SourceComponent {
 
-    private final HymalaiasAppJobsFinder hymalaiasAppJobsFetcher;
+    private final HymalaiasAppJobsFinder hymalaiasAppJobsFinder;
     private final HymalaiasJobConverter hymalaiasJobConverter;
 
     @Autowired
-    public HymalaiasAppSourceComponent(HymalaiasAppJobsFinder hymalaiasAppJobsFetcher,
+    public HymalaiasAppSourceComponent(HymalaiasAppJobsFinder hymalaiasAppJobsFinder,
                                        HymalaiasJobConverter hymalaiasJobConverter) {
-        this.hymalaiasAppJobsFetcher = hymalaiasAppJobsFetcher;
+        this.hymalaiasAppJobsFinder = hymalaiasAppJobsFinder;
         this.hymalaiasJobConverter = hymalaiasJobConverter;
     }
 
@@ -40,7 +40,7 @@ public class HymalaiasAppSourceComponent implements SourceComponent {
 
     @Override
     public Set<JobDto> findJobs() {
-        return hymalaiasAppJobsFetcher.findJobs();
+        return hymalaiasAppJobsFinder.findJobs();
     }
 
 }

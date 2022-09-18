@@ -3,8 +3,6 @@ package co.wordly.component;
 import co.wordly.data.converter.JobConverter;
 import co.wordly.data.converter.LandingJobsJobConverter;
 import co.wordly.data.dto.JobDto;
-import co.wordly.data.dto.apiresponse.ApiResponse;
-import co.wordly.data.dto.apiresponse.LandingJobsResponseDto;
 import co.wordly.data.dto.apiresponse.company.ApiCompanyResponse;
 import co.wordly.data.dto.apiresponse.company.ApiCompanyResponseLandingJobs;
 import co.wordly.finder.LandingJobsJobsFinder;
@@ -17,15 +15,15 @@ import java.util.Set;
 @Component
 public class LandingJobsSourceComponent implements SourceComponent {
 
-    private final LandingJobsJobsFinder landingJobsJobsFetcher;
+    private final LandingJobsJobsFinder landingJobsJobsFinder;
     private final LandingJobsJobConverter landingJobsJobConverter;
     private final String companyApiUrl;
 
     @Autowired
-    public LandingJobsSourceComponent(LandingJobsJobsFinder landingJobsJobsFetcher,
+    public LandingJobsSourceComponent(LandingJobsJobsFinder landingJobsJobsFinder,
                                       LandingJobsJobConverter landingJobsJobConverter,
                                       @Value("${source.api.url.companies.landingjobs}") String companyApiUrl) {
-        this.landingJobsJobsFetcher = landingJobsJobsFetcher;
+        this.landingJobsJobsFinder = landingJobsJobsFinder;
         this.landingJobsJobConverter = landingJobsJobConverter;
         this.companyApiUrl = companyApiUrl;
     }
@@ -47,7 +45,7 @@ public class LandingJobsSourceComponent implements SourceComponent {
 
     @Override
     public Set<JobDto> findJobs() {
-        return landingJobsJobsFetcher.findJobs();
+        return landingJobsJobsFinder.findJobs();
     }
 
 }

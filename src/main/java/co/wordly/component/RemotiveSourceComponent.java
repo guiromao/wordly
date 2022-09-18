@@ -15,13 +15,13 @@ import java.util.Set;
 @Component
 public class RemotiveSourceComponent implements SourceComponent {
 
-    private final RemotiveJobsFinder remotiveJobsFetcher;
+    private final RemotiveJobsFinder remotiveJobsFinder;
     private final RemotiveJobConverter remotiveJobConverter;
 
     @Autowired
-    public RemotiveSourceComponent(RemotiveJobsFinder remotiveJobsFetcher,
+    public RemotiveSourceComponent(RemotiveJobsFinder remotiveJobsFinder,
                                    RemotiveJobConverter remotiveJobConverter) {
-        this.remotiveJobsFetcher = remotiveJobsFetcher;
+        this.remotiveJobsFinder = remotiveJobsFinder;
         this.remotiveJobConverter = remotiveJobConverter;
     }
 
@@ -42,7 +42,7 @@ public class RemotiveSourceComponent implements SourceComponent {
 
     @Override
     public Set<JobDto> findJobs() {
-        return remotiveJobsFetcher.findJobs();
+        return remotiveJobsFinder.findJobs();
     }
 
 }

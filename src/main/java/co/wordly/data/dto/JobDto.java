@@ -111,19 +111,18 @@ public class JobDto {
             return false;
         }
         JobDto jobDto = (JobDto) o;
-        return Objects.equals(title, jobDto.title) &&
-                Objects.equals(description, jobDto.description) && Objects.equals(salary, jobDto.salary) &&
+        return Objects.equals(title, jobDto.title) && Objects.equals(description, jobDto.description) &&
+                Objects.equals(salary, jobDto.salary) && Objects.equals(companyId, jobDto.companyId) &&
                 Objects.equals(companyName, jobDto.companyName) && Objects.equals(url, jobDto.url) &&
                 Objects.equals(companyUrl, jobDto.companyUrl) && Objects.equals(companyLogoUrl, jobDto.companyLogoUrl) &&
                 Objects.equals(sourceId, jobDto.sourceId) && Objects.equals(sourceJobId, jobDto.sourceJobId) &&
-                Objects.equals(categories, jobDto.categories) &&
-                Objects.equals(publishDate, jobDto.publishDate);
+                Objects.equals(categories, jobDto.categories) && Objects.equals(publishDate, jobDto.publishDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, description, salary, companyName, url, companyUrl, companyLogoUrl,
-                sourceId, sourceJobId, categories, publishDate);
+        return Objects.hash(title, description, salary, companyId, companyName, url, companyUrl,
+                companyLogoUrl, sourceId, sourceJobId, categories, publishDate);
     }
 
     public static class Builder {
