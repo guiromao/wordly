@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -96,7 +97,8 @@ public class JobEntity {
     public JobEntity withCreationDate(LocalDateTime initialCreationDate) {
         return new JobEntity(id, this.title, this.description, this.salary,
                 this.companyId, this.url, this.companyLogoUrl,
-                this.sourceId, this.sourceJobId, this.publishDate, initialCreationDate);
+                this.sourceId, this.sourceJobId, this.publishDate,
+                initialCreationDate.truncatedTo(ChronoUnit.SECONDS));
     }
 
     @Override
@@ -245,7 +247,7 @@ public class JobEntity {
 
         public JobEntity build() {
             final String jobId = UUID.randomUUID().toString();
-            final LocalDateTime creationDate = LocalDateTime.now();
+            final LocalDateTime creationDate = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
 
             return new JobEntity(jobId, title, description, salary, companyId,
                     url, companyLogoUrl, sourceId, sourceJobId, publishDate, creationDate);

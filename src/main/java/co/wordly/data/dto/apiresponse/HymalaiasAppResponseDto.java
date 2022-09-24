@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY,
         getterVisibility = JsonAutoDetect.Visibility.NONE,
         isGetterVisibility = JsonAutoDetect.Visibility.NONE)
-public class HymalaiasAppResponse implements ApiResponse {
+public class HymalaiasAppResponseDto implements ApiResponse {
 
     private static final String PROPERTY_OFFSET = "offset";
     private static final String PROPERTY_LIMIT = "limit";
@@ -30,10 +30,10 @@ public class HymalaiasAppResponse implements ApiResponse {
     private final Set<HymalaiasAppDto> hymalaiasJobs;
 
     @JsonCreator
-    public HymalaiasAppResponse(@JsonProperty(PROPERTY_OFFSET) Integer offset,
-                                @JsonProperty(PROPERTY_LIMIT) Integer limit,
-                                @JsonProperty(PROPERTY_TOTAL_COUNT) Integer totalExistingJobs,
-                                @JsonProperty(PROPERTY_JOBS) Set<HymalaiasAppDto> hymalaiasJobs) {
+    public HymalaiasAppResponseDto(@JsonProperty(PROPERTY_OFFSET) Integer offset,
+                                   @JsonProperty(PROPERTY_LIMIT) Integer limit,
+                                   @JsonProperty(PROPERTY_TOTAL_COUNT) Integer totalExistingJobs,
+                                   @JsonProperty(PROPERTY_JOBS) Set<HymalaiasAppDto> hymalaiasJobs) {
         this.offset = offset;
         this.limit = limit;
         this.totalExistingJobs = totalExistingJobs;
@@ -81,7 +81,7 @@ public class HymalaiasAppResponse implements ApiResponse {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        HymalaiasAppResponse that = (HymalaiasAppResponse) o;
+        HymalaiasAppResponseDto that = (HymalaiasAppResponseDto) o;
         return Objects.equals(offset, that.offset) && Objects.equals(limit, that.limit) &&
                 Objects.equals(totalExistingJobs, that.totalExistingJobs) && Objects.equals(hymalaiasJobs, that.hymalaiasJobs);
     }

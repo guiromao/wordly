@@ -62,8 +62,7 @@ public class JobSearchScheduler {
         LOG.info("Existing job sources update: done.");
 
         LOG.info("Going to start a search Jobs task...");
-        ExecutorService executor = Executors.newCachedThreadPool();
-        executor.execute(this::searchTask);
+        searchTask();
     }
 
     private void searchTask() {

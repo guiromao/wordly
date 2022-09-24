@@ -3,7 +3,7 @@ package co.wordly.finder;
 import co.wordly.configuration.HymalaiasAppConfig;
 import co.wordly.data.dto.JobDto;
 import co.wordly.data.dto.apiresponse.ApiResponse;
-import co.wordly.data.dto.apiresponse.HymalaiasAppResponse;
+import co.wordly.data.dto.apiresponse.HymalaiasAppResponseDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +27,7 @@ public class HymalaiasAppJobsFinder extends JobsFinder {
 
     public HymalaiasAppJobsFinder(RestTemplate restTemplate,
                                   @Value("${source.api.url.hymalaiasapp}") String apiUrl) {
-        super(restTemplate, apiUrl, "Hymalaias App", HymalaiasAppResponse.class, MAX_RESULTS);
+        super(restTemplate, apiUrl, "Hymalaias App", HymalaiasAppResponseDto.class, MAX_RESULTS);
     }
 
     @Override

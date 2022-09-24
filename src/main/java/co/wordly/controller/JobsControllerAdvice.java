@@ -1,6 +1,6 @@
 package co.wordly.controller;
 
-import co.wordly.ResourceNotFoundException;
+import co.wordly.data.exception.ResourceNotFoundException;
 import co.wordly.data.dto.error.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

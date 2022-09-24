@@ -88,7 +88,7 @@ public class CompanyServiceImpl implements CompanyService {
                 .collect(Collectors.toSet());
 
         if (!CollectionUtils.isEmpty(companyIds)) {
-            return companyRepository.findBySource(sourceId, companyIds);
+            return companyRepository.findBySource(sourceId);
         }
 
         return Collections.emptyList();

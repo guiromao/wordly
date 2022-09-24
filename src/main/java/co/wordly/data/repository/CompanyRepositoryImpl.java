@@ -40,7 +40,7 @@ public class CompanyRepositoryImpl implements CompanyRepositoryCustom {
     }
 
     @Override
-    public List<CompanyEntity> findBySource(String sourceId, Set<String> sourceCompanyIds) {
+    public List<CompanyEntity> findBySource(String sourceId) {
         Criteria sourceCriteria = Criteria.where(KEY_SOURCE_RELATIONS + "." + sourceId).exists(true);
         Query query = new Query(sourceCriteria);
 

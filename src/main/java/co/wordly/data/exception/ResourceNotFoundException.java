@@ -1,4 +1,4 @@
-package co.wordly;
+package co.wordly.data.exception;
 
 public class ResourceNotFoundException extends RuntimeException {
 

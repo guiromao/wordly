@@ -43,8 +43,7 @@ public class EmailSendScheduler {
     //@Scheduled(fixedRate = 1000 * 60 * 60 * 24)
     @Scheduled(cron = "0 0 19 * * ?", zone = "Europe/Lisbon")
     public void sendEmails() {
-        ExecutorService executor = Executors.newCachedThreadPool();
-        executor.execute(this::emailSendingTask);
+        emailSendingTask();
     }
 
     private void emailSendingTask() {

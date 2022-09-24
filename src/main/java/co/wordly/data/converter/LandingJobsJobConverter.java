@@ -35,7 +35,7 @@ public class LandingJobsJobConverter extends JobConverter {
                 .map(JobDto::getCompanyId)
                 .collect(Collectors.toSet());
 
-        Map<String, String> companyPlatformIds = companyRepository.findBySource(landingJobsId, companyIds)
+        Map<String, String> companyPlatformIds = companyRepository.findBySource(landingJobsId)
                 .stream()
                 .filter(company -> isCompanyInSet(company, companyIds, landingJobsId))
                 .collect(Collectors.toMap(company -> company.getSourceRelations().get(landingJobsId),

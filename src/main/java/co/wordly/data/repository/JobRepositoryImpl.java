@@ -22,8 +22,6 @@ import java.util.stream.Collectors;
 @Repository
 public class JobRepositoryImpl implements JobRepositoryCustom {
 
-    private static final String KEY_SOURCE_ID = "sourceId";
-    private static final String KEY_SOURCE_JOB_ID = "sourceJobId";
     private static final String KEY_PUBLISH_DATE = "publishDate";
     private static final String KEY_CREATION_DATE = "creationDate";
 
@@ -32,15 +30,6 @@ public class JobRepositoryImpl implements JobRepositoryCustom {
     @Autowired
     public JobRepositoryImpl(MongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
-    }
-
-    @Override
-    public boolean exists(JobEntity jobEntity) {
-        Criteria existsCriteria = Criteria.where(KEY_SOURCE_ID).is(jobEntity.getSourceId())
-                .and(KEY_SOURCE_JOB_ID).is(jobEntity.getSourceJobId());
-        Query query = new Query(existsCriteria);
-
-        return mongoTemplate.exists(query, JobEntity.class);
     }
 
     @Override

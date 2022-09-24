@@ -1,6 +1,6 @@
 package co.wordly.service;
 
-import co.wordly.ResourceNotFoundException;
+import co.wordly.data.exception.ResourceNotFoundException;
 import co.wordly.data.converter.EmailConverter;
 import co.wordly.data.dto.api.EmailDto;
 import co.wordly.data.entity.EmailEntity;
