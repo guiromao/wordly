@@ -28,7 +28,10 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public void handleJobs(Set<JobEntity> jobEntities) {
-        Set<JobSnippet> existingJobDetails = jobRepository.getSourceJobIdsDetails();
+        Set<JobSnippet> existingJobDetails = jobRepository.findAll().stream()
+                .map(job -> new JobSnippet(job.getId(), job.getSourceId(), job.getSourceJobId(),
+                        job.getCreationDate()))
+                .collect(Collectors.toSet());
         Set<JobEntity> jobsToSave = jobEntities.stream()
                 .map(job -> updateJob(existingJobDetails, job))
                 .collect(Collectors.toSet());
@@ -45,10 +48,10 @@ public class JobServiceImpl implements JobService {
         return PlatformJobConverter.convert(jobs);
     }
 
-    private JobEntity updateJob(Set<JobSnippet> jobIds, JobEntity job) {
+    private JobEntity updateJob(Set<JobSnippet> jobSnippets, JobEntity job) {
         JobSnippet jobSnippet = new JobSnippet(job.getId(), job.getSourceId(), job.getSourceJobId(),
                 job.getCreationDate());
-        JobSnippet existingSnippet = jobIds.stream()
+        JobSnippet existingSnippet = jobSnippets.stream()
                 .filter(snippet -> snippet.isSameSnippet(jobSnippet))
                 .findAny()
                 .orElse(null);

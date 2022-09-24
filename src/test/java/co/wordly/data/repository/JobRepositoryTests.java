@@ -1,7 +1,6 @@
 package co.wordly.data.repository;
 
 import co.wordly.data.entity.JobEntity;
-import co.wordly.data.model.JobSnippet;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -69,17 +68,10 @@ class JobRepositoryTests {
     }
 
     @Test
-    void testFindJobSnippets() {
-        Set<JobSnippet> test = jobRepository.getSourceJobIdsDetails();
-        Set<String> existingJobIds = jobs.stream()
-                        .map(JobEntity::getId)
-                        .collect(Collectors.toSet());
+    void testFindJobs() {
+        Set<JobEntity> test = new HashSet<>(jobRepository.getSourceJobIdsDetails());
 
-        Assertions.assertEquals(jobs.size(), test.size());
-        Assertions.assertTrue(
-                test.stream()
-                        .allMatch(snippet -> existingJobIds.contains(snippet.getJobId()))
-        );
+        Assertions.assertEquals(jobs, test);
     }
 
     @Test

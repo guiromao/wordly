@@ -2,7 +2,6 @@ package co.wordly.data.converter;
 
 import co.wordly.configuration.JobsConfigurations;
 import co.wordly.data.dto.JobDto;
-import co.wordly.data.dto.apiresponse.ApiResponse;
 import co.wordly.data.entity.CompanyEntity;
 import co.wordly.data.entity.JobEntity;
 import co.wordly.data.entity.SourceEntity;

@@ -8,6 +8,10 @@ import java.util.stream.Collectors;
 
 public class EmailConverter {
 
+    private EmailConverter(){
+        // no instantiation
+    }
+
     public static Set<EmailDto> toDtoSet(Set<EmailEntity> emails) {
         return emails.stream()
                 .map(EmailConverter::toDto)

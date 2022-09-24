@@ -13,7 +13,7 @@ public abstract class JobConverter {
     protected final CompanyRepository companyRepository;
 
     protected JobConverter(SourceRepository sourceRepository,
-                        CompanyRepository companyRepository) {
+                           CompanyRepository companyRepository) {
         this.sourceRepository = sourceRepository;
         this.companyRepository = companyRepository;
     }

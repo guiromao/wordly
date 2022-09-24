@@ -1,7 +1,6 @@
 package co.wordly.data.repository;
 
 import co.wordly.data.entity.JobEntity;
-import co.wordly.data.model.JobSnippet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -17,7 +16,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Repository
 public class JobRepositoryImpl implements JobRepositoryCustom {
@@ -30,14 +28,6 @@ public class JobRepositoryImpl implements JobRepositoryCustom {
     @Autowired
     public JobRepositoryImpl(MongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
-    }
-
-    @Override
-    public Set<JobSnippet> getSourceJobIdsDetails() {
-        return mongoTemplate.findAll(JobEntity.class).stream()
-                .map(job -> new JobSnippet(job.getId(), job.getSourceId(), job.getSourceJobId(),
-                        job.getCreationDate()))
-                .collect(Collectors.toSet());
     }
 
     @Override
