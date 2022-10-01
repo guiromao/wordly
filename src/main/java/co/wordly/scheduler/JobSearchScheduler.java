@@ -68,7 +68,7 @@ public class JobSearchScheduler {
     private void searchTask() {
         Set<JobEntity> jobEntities = sourceComponents.entrySet().stream()
                 .map(this::getJobs)
-                .filter(Objects::nonNull)
+                .filter(setJobs -> !CollectionUtils.isEmpty(setJobs))
                 .flatMap(Collection::stream)
                 .collect(Collectors.toSet());
 

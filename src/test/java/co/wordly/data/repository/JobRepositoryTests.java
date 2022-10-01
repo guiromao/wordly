@@ -25,7 +25,7 @@ class JobRepositoryTests {
     Set<JobEntity> jobs = Set.of(
             new JobEntity.Builder()
                     .title("Java Software Developer")
-                    .description("A Jaca Job you'll love!")
+                    .description("A Java Job you'll love!")
                     .publishDate(LocalDateTime.now().minus(2, ChronoUnit.DAYS)
                             .truncatedTo(ChronoUnit.SECONDS))
                     .sourceJobId("123456")
@@ -65,13 +65,6 @@ class JobRepositoryTests {
     @AfterEach
     void teardown() {
         jobRepository.deleteAll();
-    }
-
-    @Test
-    void testFindJobs() {
-        Set<JobEntity> test = new HashSet<>(jobRepository.getSourceJobIdsDetails());
-
-        Assertions.assertEquals(jobs, test);
     }
 
     @Test
