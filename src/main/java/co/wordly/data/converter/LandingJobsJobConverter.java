@@ -57,6 +57,7 @@ public class LandingJobsJobConverter extends JobConverter {
                 .sourceJobId(dto.getSourceJobId())
                 .sourceId(sourceId)
                 .title(dto.getTitle())
+                .url(dto.getUrl())
                 .description(dto.getDescription())
                 .publishDate(LocalDateTime.parse(dateStr, dateFormatter))
                 .build();

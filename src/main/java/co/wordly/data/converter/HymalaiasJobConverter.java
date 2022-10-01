@@ -40,8 +40,8 @@ public class HymalaiasJobConverter extends JobConverter {
 
     private JobEntity convert(JobDto jobDto, String sourceId, List<CompanyEntity> companies) {
         final String companyId = companies.stream()
-                .map(CompanyEntity::getName)
-                .filter(companyName -> jobDto.getCompanyName().equals(companyName))
+                .filter(company -> jobDto.getCompanyName().equals(company.getName()))
+                .map(CompanyEntity::getId)
                 .findFirst()
                 .orElse(null);
         final int publishEpoch = Integer.parseInt(jobDto.getPublishDate());

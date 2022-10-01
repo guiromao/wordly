@@ -1,6 +1,5 @@
 package co.wordly.data.converter;
 
-import co.wordly.data.converter.EmailConverter;
 import co.wordly.data.dto.api.EmailDto;
 import co.wordly.data.entity.EmailEntity;
 import org.junit.jupiter.api.Assertions;
