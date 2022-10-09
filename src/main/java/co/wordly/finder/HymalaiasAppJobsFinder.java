@@ -14,7 +14,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -43,7 +42,7 @@ public class HymalaiasAppJobsFinder extends JobsFinder {
         while (!hasAllJobs) {
             responseDto = restTemplate.exchange(url, HttpMethod.GET, null, apiResponse);
 
-            if (Objects.nonNull(responseDto.getBody()) && !CollectionUtils.isEmpty(responseDto.getBody().getJobs())) {
+            if (responseDto.hasBody() && !CollectionUtils.isEmpty(responseDto.getBody().getJobs())) {
                 jobs.addAll(responseDto.getBody().getJobs());
                 offset += MAX_RESULTS;
                 url = apiUrl + "?offset=" + offset + "&limit=" + MAX_RESULTS;
