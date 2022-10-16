@@ -1,7 +1,6 @@
-package co.wordly.data.repository.finder;
+package co.wordly.finder;
 
 import co.wordly.data.dto.apiresponse.HymalaiasAppResponseDto;
-import co.wordly.finder.HymalaiasAppJobsFinder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

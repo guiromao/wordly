@@ -1,10 +1,8 @@
-package co.wordly.data.repository.finder;
+package co.wordly.finder;
 
 import co.wordly.data.dto.apiresponse.LandingJobsResponseDto;
-import co.wordly.finder.LandingJobsJobsFinder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;

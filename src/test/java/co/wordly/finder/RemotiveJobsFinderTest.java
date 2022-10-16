@@ -1,23 +1,14 @@
-package co.wordly.data.repository.finder;
+package co.wordly.finder;
 
-import co.wordly.data.dto.JobDto;
-import co.wordly.data.dto.RemotiveDto;
-import co.wordly.data.dto.apiresponse.ApiResponse;
 import co.wordly.data.dto.apiresponse.RemotiveJobsDto;
-import co.wordly.finder.RemotiveJobsFinder;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.Instant;
 import java.util.Optional;
-import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
