@@ -8,6 +8,7 @@ import co.wordly.service.EmailSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
     Class that will send newly added Jobs, once a day, to the users that
     subscribed to the newsletter.
  */
+@Profile("!test")
 @Component
 public class EmailSendScheduler {
 
