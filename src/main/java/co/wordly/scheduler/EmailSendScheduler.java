@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 public class EmailSendScheduler {
 
     private static final Logger LOG = LoggerFactory.getLogger(EmailSendScheduler.class);
+    private static final Integer EMAILS_NUMBER = 100;
 
     private final EmailSender emailSender;
     private final EmailRepository emailRepository;

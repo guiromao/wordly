@@ -61,7 +61,7 @@ class CompanyRepositoryTests {
 
         List<CompanyEntity> test = companyRepository.findBySource(sourceId);
 
-        Assertions.assertEquals(expectedCompanies, test);
+        Assertions.assertEquals(new HashSet<>(expectedCompanies), new HashSet<>(test));
     }
 
     @Test

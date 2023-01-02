@@ -3,7 +3,6 @@ package co.wordly.controller;
 import co.wordly.data.dto.api.EmailDto;
 import co.wordly.data.entity.EmailEntity;
 import co.wordly.data.repository.EmailRepository;
-import io.restassured.RestAssured;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
