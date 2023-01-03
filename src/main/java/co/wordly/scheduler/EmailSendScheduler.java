@@ -65,9 +65,10 @@ public class EmailSendScheduler {
             if (CollectionUtils.isEmpty(emailAccounts)) {
                 isTaskDone = true;
             } else {
-                emailAccounts.forEach(account -> processJobsForUser(todaysJobs, account));
+                totalSent += emailAccounts.stream()
+                        .map(account -> processJobsForUser(todaysJobs, account))
+                        .reduce(0, Integer::sum);
 
-                totalSent += emailAccounts.size();
                 offset += EMAILS_NUMBER;
                 limit += EMAILS_NUMBER;
             }
@@ -76,7 +77,7 @@ public class EmailSendScheduler {
         LOG.info("Send today jobs task done. Number of emails sent: {}", totalSent);
     }
 
-    private void processJobsForUser(final List<JobEntity> jobs, final EmailEntity account) {
+    private int processJobsForUser(final List<JobEntity> jobs, final EmailEntity account) {
         final Set<JobEntity> eligibleJobs = jobs.stream()
                 .filter(job -> doesJobContainKeywords(job, account.getKeywords()))
                 .collect(Collectors.toSet());
@@ -84,7 +85,11 @@ public class EmailSendScheduler {
         if (!CollectionUtils.isEmpty(eligibleJobs)) {
             emailSender.send(account.getEmail(), eligibleJobs);
             LOG.info("Sent today's jobs to user {}", account.getEmail());
+
+            return 1;
         }
+
+        return 0;
     }
 
     private boolean doesJobContainKeywords(JobEntity job, Set<String> keywords) {
