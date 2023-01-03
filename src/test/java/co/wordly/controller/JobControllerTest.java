@@ -2,6 +2,7 @@ package co.wordly.controller;
 
 import co.wordly.data.entity.JobEntity;
 import co.wordly.data.repository.JobRepository;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,19 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.context.annotation.Profile;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import static io.restassured.RestAssured.get;
+import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.hasSize;
 
 @ActiveProfiles(value = { "test" })
-@Profile("test")
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class JobControllerTest {
 
@@ -52,7 +49,10 @@ class JobControllerTest {
     void testGetByKeywords() {
         final String path = basePath + "?keywords=Java,Spring,Kotlin" + BASIC_OFFSET_LIMIT;
 
-        get(path)
+        given()
+                .with()
+                .contentType(ContentType.JSON)
+                .get(path)
                 .then()
                 .body("", hasSize(3));
     }

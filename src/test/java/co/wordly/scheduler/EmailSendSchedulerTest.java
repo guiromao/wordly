@@ -10,10 +10,12 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anySet;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -81,11 +83,20 @@ class EmailSendSchedulerTest {
     @Test
     void testSendEmails() {
         when(jobRepository.fetchTodayJobs()).thenReturn(jobs);
-        when(emailRepository.findAll()).thenReturn(emailEntities);
+        when(emailRepository.findByOffsetAndLimit(anyInt(), anyInt()))
+                .thenReturn(emailEntities)
+                .thenReturn(Collections.emptyList());
+
+        int expectedEmailsSent = (int) emailEntities.stream()
+                .filter(email -> jobs.stream()
+                        .anyMatch(job -> email.getKeywords().stream()
+                                .anyMatch(keyword -> job.getDescription().contains(keyword) ||
+                                        job.getTitle().contains(keyword))))
+                .count();
 
         sendScheduler.sendEmails();
 
-        verify(emailSender, times(2)).send(anyString(), any(Set.class));
+        verify(emailSender, times(expectedEmailsSent)).send(anyString(), anySet());
     }
 
 }

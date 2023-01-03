@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class EmailSendScheduler {
 
     private static final Logger LOG = LoggerFactory.getLogger(EmailSendScheduler.class);
-    private static final Integer EMAILS_NUMBER = 100;
+    private static final Integer EMAILS_NUMBER = 200;
 
     private final EmailSender emailSender;
     private final EmailRepository emailRepository;
@@ -52,13 +52,28 @@ public class EmailSendScheduler {
         LOG.info("Starting to send emails for today's jobs...");
 
         final List<JobEntity> todaysJobs = jobRepository.fetchTodayJobs();
-        final List<EmailEntity> emailAccounts = emailRepository.findAll();
+        boolean isTaskDone = false;
+        int offset = 0;
+        int limit = EMAILS_NUMBER;
+        int totalSent = 0;
 
         LOG.info("There are {} new jobs today", todaysJobs.size());
 
-        emailAccounts.forEach(account -> processJobsForUser(todaysJobs, account));
+        while (!isTaskDone) {
+            final List<EmailEntity> emailAccounts = emailRepository.findByOffsetAndLimit(offset, limit);
 
-        LOG.info("Send today jobs task done.");
+            if (CollectionUtils.isEmpty(emailAccounts)) {
+                isTaskDone = true;
+            } else {
+                emailAccounts.forEach(account -> processJobsForUser(todaysJobs, account));
+
+                totalSent += emailAccounts.size();
+                offset += EMAILS_NUMBER;
+                limit += EMAILS_NUMBER;
+            }
+        }
+
+        LOG.info("Send today jobs task done. Number of emails sent: {}", totalSent);
     }
 
     private void processJobsForUser(final List<JobEntity> jobs, final EmailEntity account) {
